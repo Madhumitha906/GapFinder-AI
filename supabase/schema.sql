@@ -5,6 +5,18 @@
 -- Enable pgvector extension for semantic similarity retrieval
 CREATE EXTENSION IF NOT EXISTS vector;
 
+-- 0. Users Table (Authentication & Access Control)
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  role TEXT NOT NULL CHECK (role IN ('student', 'teacher', 'evaluator')),
+  target_goal TEXT,
+  institution TEXT,
+  is_demo_user BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- 1. Courses Table
 CREATE TABLE IF NOT EXISTS courses (
   id TEXT PRIMARY KEY,

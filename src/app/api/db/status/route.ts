@@ -35,10 +35,14 @@ export async function GET(req: NextRequest) {
     vectorStore: 'pgvector Cosine Embedding Simulation + BM25',
     schemaFile: 'supabase/schema.sql',
     tableStats: {
+      users: 3,
       courses: 1,
       documents: SAMPLE_DOCUMENTS.length,
       documentChunks: SAMPLE_CHUNKS.length,
-      topics: SAMPLE_TOPICS.length
+      topics: SAMPLE_TOPICS.length,
+      quizAttempts: 1,
+      gapReports: 1,
+      revisionPlans: 1
     },
     pgvectorConfig: {
       extension: 'vector',

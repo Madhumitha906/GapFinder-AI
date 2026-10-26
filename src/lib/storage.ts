@@ -17,8 +17,16 @@ import {
   generatePersonalizedPlan
 } from './rag-engine';
 
+export interface RegisteredUser extends UserSession {
+  passwordHash?: string;
+  createdAt: string;
+  targetGoal?: string;
+  institution?: string;
+}
+
 const STORAGE_KEYS = {
   CURRENT_USER: 'gapfinder_user_v1',
+  REGISTERED_USERS: 'gapfinder_registered_users_v1',
   COURSES: 'gapfinder_courses_v1',
   ACTIVE_COURSE_ID: 'gapfinder_active_course_v1',
   QUIZ_ATTEMPTS: 'gapfinder_quiz_attempts_v1',
@@ -32,9 +40,100 @@ export const DEMO_USER: UserSession = {
   id: 'usr-demo-judge',
   name: 'Judge / Evaluator',
   email: 'judge@gapfinder.ai',
-  role: 'student',
+  role: 'evaluator',
   isDemoUser: true
 };
+
+export const PRESEEDED_USERS: RegisteredUser[] = [
+  {
+    id: 'usr-judge-eval',
+    name: 'Hackathon Judge',
+    email: 'judge@gapfinder.ai',
+    role: 'evaluator',
+    targetGoal: 'Hackathon Evaluation & Verification',
+    institution: 'Judging Committee',
+    createdAt: '2026-10-20T10:00:00Z',
+    isDemoUser: true
+  },
+  {
+    id: 'usr-student-alex',
+    name: 'Alex Rivera',
+    email: 'student@gapfinder.ai',
+    role: 'student',
+    targetGoal: 'University Semester Finals & Placement',
+    institution: 'State Tech University (CS Dept)',
+    createdAt: '2026-10-22T14:30:00Z',
+    isDemoUser: false
+  },
+  {
+    id: 'usr-teacher-sarah',
+    name: 'Prof. Sarah Vance',
+    email: 'teacher@gapfinder.ai',
+    role: 'teacher',
+    targetGoal: 'Curriculum Diagnostic Analytics',
+    institution: 'Faculty of Computer Science',
+    createdAt: '2026-10-21T09:15:00Z',
+    isDemoUser: false
+  }
+];
+
+export function getRegisteredUsers(): RegisteredUser[] {
+  if (typeof window === 'undefined') return PRESEEDED_USERS;
+  try {
+    const data = localStorage.getItem(STORAGE_KEYS.REGISTERED_USERS);
+    if (!data) {
+      localStorage.setItem(STORAGE_KEYS.REGISTERED_USERS, JSON.stringify(PRESEEDED_USERS));
+      return PRESEEDED_USERS;
+    }
+    const parsed = JSON.parse(data);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : PRESEEDED_USERS;
+  } catch {
+    return PRESEEDED_USERS;
+  }
+}
+
+export function registerUser(newUserData: {
+  name: string;
+  email: string;
+  role: 'student' | 'teacher' | 'evaluator';
+  targetGoal?: string;
+  institution?: string;
+  password?: string;
+}): RegisteredUser {
+  const users = getRegisteredUsers();
+  const existing = users.find(u => u.email.toLowerCase() === newUserData.email.toLowerCase());
+  if (existing) {
+    return existing;
+  }
+
+  const newUser: RegisteredUser = {
+    id: `usr-${Date.now()}`,
+    name: newUserData.name.trim(),
+    email: newUserData.email.trim().toLowerCase(),
+    role: newUserData.role,
+    targetGoal: newUserData.targetGoal || 'Final Exams Prep',
+    institution: newUserData.institution || 'University / College',
+    createdAt: new Date().toISOString(),
+    isDemoUser: false
+  };
+
+  users.push(newUser);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEYS.REGISTERED_USERS, JSON.stringify(users));
+  }
+  return newUser;
+}
+
+export function authenticateUser(email: string, _password?: string): RegisteredUser | null {
+  const users = getRegisteredUsers();
+  const found = users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  return found || null;
+}
+
+export function clearStoredUser(): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(DEMO_USER));
+}
 
 export function getStoredUser(): UserSession {
   if (typeof window === 'undefined') return DEMO_USER;

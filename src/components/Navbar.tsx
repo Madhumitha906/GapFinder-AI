@@ -19,10 +19,19 @@ import {
   Database,
   User,
   LogIn,
+  UserPlus,
+  LogOut,
   Server
 } from 'lucide-react';
 import { Course, GapReport, UserSession } from '@/types';
-import { resetToDemoCourse, setGeminiApiKey, getGeminiApiKey, getStoredUser } from '@/lib/storage';
+import {
+  resetToDemoCourse,
+  setGeminiApiKey,
+  getGeminiApiKey,
+  getStoredUser,
+  clearStoredUser,
+  DEMO_USER
+} from '@/lib/storage';
 import { CreateCourseModal } from '@/components/CreateCourseModal';
 import { AuthModal } from '@/components/AuthModal';
 
@@ -50,6 +59,7 @@ export function Navbar({
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin');
   const [currentUser, setCurrentUser] = useState<UserSession>(() => getStoredUser());
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [keySavedMessage, setKeySavedMessage] = useState(false);
@@ -76,22 +86,72 @@ export function Navbar({
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
       {/* 1. Top Bar: Evaluation Status, NextAuth User, & Tools */}
-      <div className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 text-white text-xs px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2 border-b border-slate-800">
+      <div className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 text-white text-xs px-4 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2.5 border-b border-slate-800">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 font-bold px-2 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
             Judge Evaluation Demo
           </span>
 
-          {/* Interactive NextAuth User Pill */}
-          <button
-            onClick={() => setShowAuthModal(true)}
-            className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white transition px-2.5 py-0.5 rounded-md bg-white/10 hover:bg-white/20 border border-white/15 cursor-pointer font-medium text-[11px]"
-            title="Click to Switch Accounts or Inspect NextAuth Credentials"
-          >
+          {/* Interactive User Session Badge */}
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-white/10 border border-white/15 text-[11px]">
             <User className="w-3 h-3 text-indigo-300" />
-            <span>NextAuth: <strong className="text-white">{currentUser.email}</strong></span>
-            <span className="text-[10px] text-amber-300 font-extrabold uppercase">({currentUser.role})</span>
-            <span className="text-[10px] text-slate-300 underline ml-0.5">Switch</span>
+            <span className="text-slate-300">
+              User: <strong className="text-white">{currentUser.name || currentUser.email}</strong>
+            </span>
+            <span
+              className={`text-[9px] font-extrabold uppercase px-1.5 py-0.2 rounded ${
+                currentUser.role === 'evaluator'
+                  ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30'
+                  : currentUser.role === 'teacher'
+                  ? 'bg-emerald-400/20 text-emerald-300 border border-emerald-400/30'
+                  : 'bg-sky-400/20 text-sky-300 border border-sky-400/30'
+              }`}
+            >
+              {currentUser.role}
+            </span>
+          </div>
+
+          {/* Sign In & Sign Up Buttons */}
+          <div className="inline-flex items-center rounded-lg bg-white/5 border border-white/10 p-0.5 gap-1">
+            <button
+              onClick={() => {
+                setAuthModalTab('signin');
+                setShowAuthModal(true);
+              }}
+              className="inline-flex items-center gap-1 text-slate-200 hover:text-white transition px-2 py-0.5 rounded hover:bg-white/10 cursor-pointer font-semibold text-[11px]"
+              title="Sign In with Demo Judge or existing account"
+            >
+              <LogIn className="w-3 h-3 text-indigo-300" />
+              <span>Sign In</span>
+            </button>
+
+            <span className="text-slate-600 text-[10px]">|</span>
+
+            <button
+              onClick={() => {
+                setAuthModalTab('signup');
+                setShowAuthModal(true);
+              }}
+              className="inline-flex items-center gap-1 text-amber-300 hover:text-amber-200 transition px-2 py-0.5 rounded hover:bg-amber-400/10 cursor-pointer font-bold text-[11px]"
+              title="Create a new student, teacher, or judge account"
+            >
+              <UserPlus className="w-3 h-3 text-amber-300" />
+              <span>Sign Up</span>
+            </button>
+          </div>
+
+          {/* Sign Out Button */}
+          <button
+            onClick={() => {
+              clearStoredUser();
+              setCurrentUser(DEMO_USER);
+              onRefreshData();
+            }}
+            className="text-slate-400 hover:text-rose-300 transition px-1.5 py-0.5 rounded hover:bg-rose-500/10 text-[10px] inline-flex items-center gap-1"
+            title="Reset to default session"
+          >
+            <LogOut className="w-2.5 h-2.5" />
+            <span>Sign Out</span>
           </button>
 
           {/* PostgreSQL / Supabase pgvector Status Badge */}
@@ -100,6 +160,10 @@ export function Navbar({
             className="inline-flex items-center gap-1.5 text-slate-200 hover:text-white transition px-2.5 py-0.5 rounded-md bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-400/30 cursor-pointer font-medium text-[11px]"
             title="Click to open PostgreSQL & pgvector Database Studio"
           >
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
             <Server className="w-3 h-3 text-emerald-400" />
             <span>PostgreSQL: <strong className="text-emerald-300">pgvector Connected</strong></span>
           </button>
@@ -381,6 +445,7 @@ export function Navbar({
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
         currentUser={currentUser}
+        initialTab={authModalTab}
         onUserLoggedIn={user => {
           setCurrentUser(user);
           onRefreshData();
