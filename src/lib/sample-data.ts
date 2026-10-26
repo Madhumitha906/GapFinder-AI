@@ -1,4 +1,12 @@
-import { Course, DocumentChunk, QuizQuestion, TopicNode, UploadedDocument } from '@/types';
+import {
+  Course,
+  DocumentChunk,
+  QuizQuestion,
+  TopicNode,
+  UploadedDocument,
+  TeacherSubjectClass,
+  StudentPerformanceRecord
+} from '@/types';
 
 export const SAMPLE_CHUNKS: DocumentChunk[] = [
   {
@@ -404,3 +412,406 @@ export const INITIAL_PRELOADED_COURSE: Course = {
   topics: SAMPLE_TOPICS,
   isPreloaded: true
 };
+
+export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
+  {
+    id: 'subj-cs301',
+    subjectTitle: 'CS301: Operating Systems & System Architecture',
+    subjectCode: 'CS-301-CORE',
+    semester: 'Fall Semester 2026 (Section A)',
+    enrolledStudentsCount: 30,
+    activeSignedInCount: 28,
+    classAverageScore: 68,
+    criticalGapCount: 3,
+    topPerformersCount: 8,
+    commonWeakTopic: 'Virtual Memory & Paging (FIFO Belady\'s Anomaly)',
+    students: [
+      {
+        id: 'std-1',
+        name: 'Alex Rivera',
+        email: 'alex.rivera@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 4,
+        overallScore: 74,
+        performanceTier: 'Proficient',
+        weakestTopic: 'Virtual Memory & Page Replacement',
+        strongestTopic: 'CPU Scheduling (Round Robin & SJF)',
+        primaryCognitiveGap: 'Conceptual Misunderstanding',
+        lastActive: 'Today, 2:15 PM',
+        recommendedRemedial: 'Assign 15-min interactive drill on stack vs non-stack page replacement algorithms.',
+        topicScores: {
+          'CPU Scheduling': 92,
+          'Process Synchronization': 80,
+          'Deadlock Handling': 70,
+          'Virtual Memory Paging': 54
+        }
+      },
+      {
+        id: 'std-2',
+        name: 'Maya Patel',
+        email: 'maya.patel@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 5,
+        overallScore: 92,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Semaphore Inversion Race Conditions',
+        strongestTopic: 'Deadlock Banker\'s Safety Algorithm',
+        primaryCognitiveGap: 'Application / Formula Slip',
+        lastActive: 'Today, 11:30 AM',
+        recommendedRemedial: 'Candidate for peer tutoring mentor on Concurrency and Deadlocks.',
+        topicScores: {
+          'CPU Scheduling': 98,
+          'Process Synchronization': 88,
+          'Deadlock Handling': 95,
+          'Virtual Memory Paging': 87
+        }
+      },
+      {
+        id: 'std-3',
+        name: 'David Kim',
+        email: 'david.kim@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 2,
+        overallScore: 42,
+        performanceTier: 'Critical Gap',
+        weakestTopic: 'Deadlock Circular Wait Ordering',
+        strongestTopic: 'FCFS Scheduling Concepts',
+        primaryCognitiveGap: 'Recall Failure',
+        lastActive: 'Yesterday',
+        recommendedRemedial: 'Schedule 1-on-1 office hours on Coffman 4 conditions and resource graphs.',
+        topicScores: {
+          'CPU Scheduling': 58,
+          'Process Synchronization': 40,
+          'Deadlock Handling': 32,
+          'Virtual Memory Paging': 38
+        }
+      },
+      {
+        id: 'std-4',
+        name: 'Elena Rostova',
+        email: 'elena.rostova@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 5,
+        overallScore: 88,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'TLB Hit Ratio & Effective Access Time',
+        strongestTopic: 'Critical Section Mutual Exclusion',
+        primaryCognitiveGap: 'Application / Formula Slip',
+        lastActive: 'Today, 9:45 AM',
+        recommendedRemedial: 'Review formula: EAT = (HitRatio * (TLB + Mem)) + ((1 - HitRatio) * (TLB + 2*Mem)).',
+        topicScores: {
+          'CPU Scheduling': 94,
+          'Process Synchronization': 90,
+          'Deadlock Handling': 88,
+          'Virtual Memory Paging': 80
+        }
+      },
+      {
+        id: 'std-5',
+        name: 'Marcus Johnson',
+        email: 'marcus.j@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 3,
+        overallScore: 51,
+        performanceTier: 'Needs Attention',
+        weakestTopic: 'Belady\'s Anomaly in FIFO Replacement',
+        strongestTopic: 'Preemptive vs Nonpreemptive Scheduling',
+        primaryCognitiveGap: 'Conceptual Misunderstanding',
+        lastActive: '2 days ago',
+        recommendedRemedial: 'Provide visual counterexample for FIFO with 3 vs 4 frames on sequence 1,2,3,4,1,2,5,1,2,3,4,5.',
+        topicScores: {
+          'CPU Scheduling': 68,
+          'Process Synchronization': 55,
+          'Deadlock Handling': 48,
+          'Virtual Memory Paging': 33
+        }
+      },
+      {
+        id: 'std-6',
+        name: 'Priya Sharma',
+        email: 'priya.sharma@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 4,
+        overallScore: 81,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Banker\'s Safety Vector Calculations',
+        strongestTopic: 'Counting Semaphores vs Binary Mutex',
+        primaryCognitiveGap: 'Application / Formula Slip',
+        lastActive: 'Today, 1:10 PM',
+        recommendedRemedial: 'Practice Available, Allocation, Max matrix subtraction exercises.',
+        topicScores: {
+          'CPU Scheduling': 86,
+          'Process Synchronization': 88,
+          'Deadlock Handling': 76,
+          'Virtual Memory Paging': 74
+        }
+      },
+      {
+        id: 'std-7',
+        name: 'Liam O\'Connor',
+        email: 'liam.oc@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 1,
+        overallScore: 38,
+        performanceTier: 'Critical Gap',
+        weakestTopic: 'Process Synchronization & Race Conditions',
+        strongestTopic: 'Basic Process States',
+        primaryCognitiveGap: 'Recall Failure',
+        lastActive: '3 days ago',
+        recommendedRemedial: 'Urgent intervention needed: re-test foundational concepts with grounded notes.',
+        topicScores: {
+          'CPU Scheduling': 46,
+          'Process Synchronization': 28,
+          'Deadlock Handling': 42,
+          'Virtual Memory Paging': 36
+        }
+      },
+      {
+        id: 'std-8',
+        name: 'Sophia Zhang',
+        email: 'sophia.zhang@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 6,
+        overallScore: 96,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'None (Full Mastery)',
+        strongestTopic: 'Virtual Memory & Multi-Level Page Tables',
+        primaryCognitiveGap: 'None (Mastered)',
+        lastActive: 'Today, 3:00 PM',
+        recommendedRemedial: 'Assign advanced extension challenges (e.g. Inverted Page Table hashing simulation).',
+        topicScores: {
+          'CPU Scheduling': 98,
+          'Process Synchronization': 96,
+          'Deadlock Handling': 94,
+          'Virtual Memory Paging': 96
+        }
+      },
+      {
+        id: 'std-9',
+        name: 'Lucas Garcia',
+        email: 'lucas.g@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 3,
+        overallScore: 66,
+        performanceTier: 'Proficient',
+        weakestTopic: 'Counting Semaphores vs Binary Mutex',
+        strongestTopic: 'Round Robin Time Quantum Selection',
+        primaryCognitiveGap: 'Conceptual Misunderstanding',
+        lastActive: 'Yesterday',
+        recommendedRemedial: 'Review producer-consumer bounded-buffer code implementation with empty/full semaphores.',
+        topicScores: {
+          'CPU Scheduling': 82,
+          'Process Synchronization': 54,
+          'Deadlock Handling': 66,
+          'Virtual Memory Paging': 62
+        }
+      },
+      {
+        id: 'std-10',
+        name: 'Aisha Al-Mansoor',
+        email: 'aisha.m@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 3,
+        overallScore: 61,
+        performanceTier: 'Proficient',
+        weakestTopic: 'Deadlock Detection vs Prevention',
+        strongestTopic: 'SRTF Scheduling Preemption',
+        primaryCognitiveGap: 'Recall Failure',
+        lastActive: 'Today, 10:15 AM',
+        recommendedRemedial: 'Review differences between avoidance (Banker\'s), prevention (breaking Coffman), and detection (wait-for graphs).',
+        topicScores: {
+          'CPU Scheduling': 76,
+          'Process Synchronization': 64,
+          'Deadlock Handling': 50,
+          'Virtual Memory Paging': 54
+        }
+      },
+      {
+        id: 'std-11',
+        name: 'Noah Bennett',
+        email: 'noah.b@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 4,
+        overallScore: 84,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Bounded Waiting Criteria',
+        strongestTopic: 'TLB Paging Address Translation',
+        primaryCognitiveGap: 'Conceptual Misunderstanding',
+        lastActive: 'Today, 12:00 PM',
+        recommendedRemedial: 'Clarify distinction between progress and bounded waiting in Peterson\'s algorithm.',
+        topicScores: {
+          'CPU Scheduling': 88,
+          'Process Synchronization': 78,
+          'Deadlock Handling': 82,
+          'Virtual Memory Paging': 88
+        }
+      },
+      {
+        id: 'std-12',
+        name: 'Chloe Dubois',
+        email: 'chloe.d@university.edu',
+        enrolledSubject: 'CS301: Operating Systems',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 2,
+        overallScore: 47,
+        performanceTier: 'Needs Attention',
+        weakestTopic: 'Shortest Job First Starvation',
+        strongestTopic: 'Round Robin Quantum Context Switching',
+        primaryCognitiveGap: 'Recall Failure',
+        lastActive: '4 days ago',
+        recommendedRemedial: 'Encourage student to complete Diagnostic Quiz 2 on Synchronization & Deadlocks.',
+        topicScores: {
+          'CPU Scheduling': 55,
+          'Process Synchronization': 42,
+          'Deadlock Handling': 44,
+          'Virtual Memory Paging': 47
+        }
+      }
+    ]
+  },
+  {
+    id: 'subj-cs204',
+    subjectTitle: 'CS204: Database Management Systems',
+    subjectCode: 'CS-204-DB',
+    semester: 'Fall Semester 2026 (Section B)',
+    enrolledStudentsCount: 34,
+    activeSignedInCount: 31,
+    classAverageScore: 72,
+    criticalGapCount: 2,
+    topPerformersCount: 11,
+    commonWeakTopic: 'B+ Tree Indexing & 2-Phase Locking (2PL)',
+    students: [
+      {
+        id: 'std-201',
+        name: 'Alex Rivera',
+        email: 'alex.rivera@university.edu',
+        enrolledSubject: 'CS204: Database Systems',
+        subjectCode: 'CS-204',
+        quizzesAttempted: 3,
+        overallScore: 78,
+        performanceTier: 'Proficient',
+        weakestTopic: 'Conflict Serializability & Precedence Graphs',
+        strongestTopic: 'SQL Relational Algebra & Joins',
+        primaryCognitiveGap: 'Conceptual Misunderstanding',
+        lastActive: 'Yesterday',
+        recommendedRemedial: 'Review topological sorting on cycle detection for serializability graphs.',
+        topicScores: {
+          'Relational Model & Normalization': 88,
+          'Transaction ACID Properties': 74,
+          'Indexing & B+ Trees': 76,
+          'Concurrency Control': 64
+        }
+      },
+      {
+        id: 'std-202',
+        name: 'Maya Patel',
+        email: 'maya.patel@university.edu',
+        enrolledSubject: 'CS204: Database Systems',
+        subjectCode: 'CS-204',
+        quizzesAttempted: 4,
+        overallScore: 94,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Strict vs Rigorous 2PL',
+        strongestTopic: 'BCNF Normalization Decomposition',
+        primaryCognitiveGap: 'Application / Formula Slip',
+        lastActive: 'Today, 10:00 AM',
+        recommendedRemedial: 'Ready for database query optimizer and cost estimation exercises.',
+        topicScores: {
+          'Relational Model & Normalization': 96,
+          'Transaction ACID Properties': 94,
+          'Indexing & B+ Trees': 92,
+          'Concurrency Control': 94
+        }
+      },
+      {
+        id: 'std-203',
+        name: 'David Kim',
+        email: 'david.kim@university.edu',
+        enrolledSubject: 'CS204: Database Systems',
+        subjectCode: 'CS-204',
+        quizzesAttempted: 2,
+        overallScore: 49,
+        performanceTier: 'Needs Attention',
+        weakestTopic: '3NF vs BCNF Functional Dependencies',
+        strongestTopic: 'Basic SQL SELECT Queries',
+        primaryCognitiveGap: 'Recall Failure',
+        lastActive: 'Yesterday',
+        recommendedRemedial: 'Assign Armstrong Axioms and candidate key derivation drills.',
+        topicScores: {
+          'Relational Model & Normalization': 45,
+          'Transaction ACID Properties': 52,
+          'Indexing & B+ Trees': 48,
+          'Concurrency Control': 51
+        }
+      }
+    ]
+  },
+  {
+    id: 'subj-cs402',
+    subjectTitle: 'CS402: Distributed Systems & Cloud Computing',
+    subjectCode: 'CS-402-DIST',
+    semester: 'Fall Semester 2026 (Advanced Elective)',
+    enrolledStudentsCount: 22,
+    activeSignedInCount: 20,
+    classAverageScore: 64,
+    criticalGapCount: 4,
+    topPerformersCount: 5,
+    commonWeakTopic: 'Raft / Paxos Consensus Quorum Leader Election',
+    students: [
+      {
+        id: 'std-401',
+        name: 'Sophia Zhang',
+        email: 'sophia.zhang@university.edu',
+        enrolledSubject: 'CS402: Distributed Systems',
+        subjectCode: 'CS-402',
+        quizzesAttempted: 4,
+        overallScore: 95,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Vector Clock Concurrency Causality',
+        strongestTopic: 'CAP Theorem & Eventual Consistency',
+        primaryCognitiveGap: 'None (Mastered)',
+        lastActive: 'Today, 2:30 PM',
+        recommendedRemedial: 'Advanced study: Byzantine Fault Tolerant (BFT) consensus algorithms.',
+        topicScores: {
+          'Lamport Timestamps & Vector Clocks': 92,
+          'Consensus (Raft/Paxos)': 96,
+          'Distributed Transactions (2PC)': 98,
+          'CAP Theorem & Replication': 94
+        }
+      },
+      {
+        id: 'std-402',
+        name: 'Liam O\'Connor',
+        email: 'liam.oc@university.edu',
+        enrolledSubject: 'CS402: Distributed Systems',
+        subjectCode: 'CS-402',
+        quizzesAttempted: 1,
+        overallScore: 41,
+        performanceTier: 'Critical Gap',
+        weakestTopic: 'Two-Phase Commit (2PC) Blocking Coordinator Failures',
+        strongestTopic: 'RPC Basics',
+        primaryCognitiveGap: 'Conceptual Misunderstanding',
+        lastActive: '2 days ago',
+        recommendedRemedial: 'Explain coordinator timeout states and 3-Phase Commit (3PC) non-blocking transitions.',
+        topicScores: {
+          'Lamport Timestamps & Vector Clocks': 44,
+          'Consensus (Raft/Paxos)': 38,
+          'Distributed Transactions (2PC)': 35,
+          'CAP Theorem & Replication': 47
+        }
+      }
+    ]
+  }
+];
+

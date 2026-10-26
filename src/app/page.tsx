@@ -12,6 +12,7 @@ import { ProgressDashboardView } from '@/components/ProgressDashboardView';
 import { DatabaseStudioView } from '@/components/DatabaseStudioView';
 import { ArchitectureView } from '@/components/ArchitectureView';
 import { AuthLandingView } from '@/components/AuthLandingView';
+import { TeacherDashboardView } from '@/components/TeacherDashboardView';
 import { Course, GapReport, RevisionPlan, UserSession } from '@/types';
 import {
   getActiveCourse,
@@ -26,9 +27,11 @@ import {
 } from '@/lib/storage';
 import { computeGapReport, generatePersonalizedPlan } from '@/lib/rag-engine';
 import { INITIAL_PRELOADED_COURSE } from '@/lib/sample-data';
+import { BookOpen, ArrowLeft } from 'lucide-react';
 
 export default function Home() {
   const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
+  const [previewStudentView, setPreviewStudentView] = useState(false);
 
   const [activeTab, setActiveTab] = useState<string>('topic-map');
   const [courses, setCourses] = useState<Course[]>([INITIAL_PRELOADED_COURSE]);
@@ -96,23 +99,55 @@ export default function Home() {
   const handleSignOut = () => {
     clearStoredUser();
     setCurrentUser(null);
+    setPreviewStudentView(false);
   };
 
-  // FIRST SHOW SIGN IN & SIGN UP LANDING SCREEN
+  // 1. FIRST SCREEN: ONLY SIGN IN AND SIGN UP IN THE MIDDLE
   if (!currentUser) {
     return (
       <AuthLandingView
         onAuthenticated={user => {
           setCurrentUser(user);
+          setPreviewStudentView(false);
           loadData();
         }}
       />
     );
   }
 
-  // AFTER SIGN IN OR SIGN UP: SHOW FULL PROJECT DASHBOARD
+  // 2. TEACHER ROLE: SHOW TEACHER PORTAL & CLASS PERFORMANCE
+  if (currentUser.role === 'teacher' && !previewStudentView) {
+    return (
+      <TeacherDashboardView
+        currentUser={currentUser}
+        onSignOut={handleSignOut}
+        onSwitchToStudentView={() => setPreviewStudentView(true)}
+      />
+    );
+  }
+
+  // 3. STUDENT ROLE (OR TEACHER IN PREVIEW MODE): SHOW CURRENT PROJECT DASHBOARD
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
+      {/* Educator Preview Bar (if teacher switched to student view) */}
+      {currentUser.role === 'teacher' && previewStudentView && (
+        <div className="bg-emerald-800 text-white px-4 py-2 text-xs flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BookOpen className="w-4 h-4 text-emerald-300" />
+            <span>
+              Educator Preview Mode: You are viewing the student study workflow as <strong>{currentUser.name}</strong>.
+            </span>
+          </div>
+          <button
+            onClick={() => setPreviewStudentView(false)}
+            className="px-3 py-1 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white font-bold transition flex items-center gap-1.5"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Teacher Dashboard</span>
+          </button>
+        </div>
+      )}
+
       <Navbar
         activeTab={activeTab}
         setActiveTab={setActiveTab}

@@ -174,3 +174,34 @@ export interface UserSession {
   role: 'student' | 'teacher' | 'evaluator';
   isDemoUser: boolean;
 }
+
+export interface StudentPerformanceRecord {
+  id: string;
+  name: string;
+  email: string;
+  enrolledSubject: string;
+  subjectCode: string;
+  quizzesAttempted: number;
+  overallScore: number;
+  performanceTier: 'High Distinction' | 'Proficient' | 'Needs Attention' | 'Critical Gap';
+  weakestTopic: string;
+  strongestTopic: string;
+  primaryCognitiveGap: 'Recall Failure' | 'Conceptual Misunderstanding' | 'Application / Formula Slip' | 'None (Mastered)';
+  lastActive: string;
+  topicScores: Record<string, number>;
+  recommendedRemedial: string;
+}
+
+export interface TeacherSubjectClass {
+  id: string;
+  subjectTitle: string;
+  subjectCode: string;
+  semester: string;
+  enrolledStudentsCount: number;
+  activeSignedInCount: number;
+  classAverageScore: number;
+  criticalGapCount: number;
+  topPerformersCount: number;
+  commonWeakTopic: string;
+  students: StudentPerformanceRecord[];
+}
