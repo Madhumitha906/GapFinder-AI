@@ -8,7 +8,11 @@ import {
   StudentPerformanceRecord
 } from '@/types';
 
+// ==========================================================
+// 1. CHUNKS (Operating Systems, Database Systems, Machine Learning)
+// ==========================================================
 export const SAMPLE_CHUNKS: DocumentChunk[] = [
+  // --- CS201: Operating Systems Chunks ---
   {
     id: 'chk-os-101',
     docId: 'doc-tb-1',
@@ -99,18 +103,6 @@ Effective Access Time (EAT) = (Hit_Ratio * (TLB_access + Memory_access)) + ((1 -
     keywords: ['page replacement', 'fifo', 'belady anomaly', 'optimal replacement', 'lru', 'thrashing', 'page fault']
   },
   {
-    id: 'chk-os-401',
-    docId: 'doc-tb-1',
-    docTitle: 'Operating Systems Principles (8th Ed) - Silberschatz & Galvin',
-    docType: 'textbook',
-    section: 'Chapter 10.4: Disk Scheduling Algorithms',
-    text: `The operating system is responsible for using hardware efficiently. For magnetic disk drives, this means having fast access times and high disk bandwidth.
-The seek time is the time for the disk arm to move the heads to the cylinder containing the desired sector.
-In SCAN scheduling (the elevator algorithm), the disk arm starts at one end of the disk and moves toward the other end, servicing requests as it reaches each cylinder until it gets to the other end of the disk. At the other end, the direction of head movement is reversed, and servicing continues.
-C-SCAN (Circular SCAN) provides a more uniform wait time. Like SCAN, C-SCAN moves the head from one end of the disk to the other, servicing requests along the way. When the head reaches the other end, however, it immediately returns to the beginning of the disk without servicing any requests on the return trip.`,
-    keywords: ['disk scheduling', 'seek time', 'scan', 'c-scan', 'elevator algorithm', 'head movement']
-  },
-  {
     id: 'chk-os-past-1',
     docId: 'doc-exam-1',
     docTitle: 'University Midterm Exam 2024 - Computer Systems Architecture',
@@ -148,106 +140,372 @@ For miss: 20ns (TLB lookup) + 100ns (page table lookup) + 100ns (fetch byte) = 2
 (b) EAT = 0.98 * (120) + 0.02 * (220) = 117.6 + 4.4 = 122 ns.
 Increasing hit ratio by 18% reduces memory access latency by 18 ns per instruction.`,
     keywords: ['eat calculation', 'tlb hit ratio', 'effective access time', 'page table latency', 'memory access']
+  },
+
+  // --- CS202: Database Management Systems Chunks ---
+  {
+    id: 'chk-db-101',
+    docId: 'doc-db-tb-1',
+    docTitle: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+    docType: 'textbook',
+    section: 'Chapter 7: Relational Database Normalization',
+    text: `A relation schema R is in Boyce-Codd Normal Form (BCNF) with respect to a set F of functional dependencies if, for all functional dependencies in F+ of the form alpha -> beta, where alpha is a subset of R and beta is a subset of R, at least one of the following holds:
+1. alpha -> beta is a trivial functional dependency (that is, beta is a subset of alpha).
+2. alpha is a superkey for schema R.
+A relation is in Third Normal Form (3NF) if for all alpha -> beta in F+, either alpha -> beta is trivial, alpha is a superkey, or each attribute in beta - alpha is contained in a candidate key of R. Every BCNF schema is in 3NF, but not every 3NF schema satisfies BCNF.`,
+    keywords: ['bcnf', '3nf', 'functional dependency', 'superkey', 'normalization', 'candidate key']
+  },
+  {
+    id: 'chk-db-102',
+    docId: 'doc-db-tb-1',
+    docTitle: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+    docType: 'textbook',
+    section: 'Chapter 14: Transactions & ACID Properties',
+    text: `A transaction is a unit of program execution that accesses and possibly updates various data items. To preserve database integrity, the transaction system must guarantee the ACID properties:
+1. Atomicity: Either all operations of the transaction are reflected properly in the database, or none are.
+2. Consistency: Execution of a transaction in isolation preserves the consistency of the database.
+3. Isolation: Even though multiple transactions execute concurrently, the system guarantees that for every pair of transactions Ti and Tj, it appears to Ti that either Tj finished before Ti started, or Tj started after Ti finished.
+4. Durability: After a transaction completes successfully, the changes it has made to the database persist, even if the system crashes.`,
+    keywords: ['transactions', 'acid properties', 'atomicity', 'consistency', 'isolation', 'durability', 'wal']
+  },
+  {
+    id: 'chk-db-103',
+    docId: 'doc-db-tb-1',
+    docTitle: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+    docType: 'textbook',
+    section: 'Chapter 15: Concurrency Control & Two-Phase Locking',
+    text: `Two-Phase Locking (2PL) is a concurrency control protocol that guarantees conflict serializability. Under 2PL, a transaction must acquire locks in two distinct phases:
+1. Growing Phase: A transaction may obtain locks, but may not release any lock.
+2. Shrinking Phase: A transaction may release locks, but may not obtain any new locks.
+The point at which a transaction acquires its final lock is the lock point.
+Strict 2PL requires that all exclusive (X) locks acquired by a transaction be held until the transaction commits or aborts. Rigorous 2PL requires that all shared (S) and exclusive (X) locks be held until commit, preventing cascading aborts.`,
+    keywords: ['two-phase locking', '2pl', 'conflict serializability', 'strict 2pl', 'rigorous 2pl', 'cascading aborts']
+  },
+  {
+    id: 'chk-db-104',
+    docId: 'doc-db-tb-1',
+    docTitle: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+    docType: 'textbook',
+    section: 'Chapter 11: Indexing & B+ Trees',
+    text: `A B+ tree index takes the form of a balanced tree in which every path from the root of the tree to a leaf of the tree is of the same length.
+Each nonleaf node contains up to n-1 search-key values and n pointers to child nodes. Nonleaf nodes form a multi-level sparse index over the leaf nodes.
+Leaf nodes contain search-key values and pointers to records or buckets of records. All leaf nodes are chained together in a doubly linked list, enabling highly efficient range queries in O(log_n(N) + k) time.
+B+ tree insertions and deletions preserve balanced depth through node splitting and merging, ensuring that disk I/O costs remain logarithmic.`,
+    keywords: ['b+ trees', 'indexing', 'balanced tree', 'range queries', 'leaf nodes', 'search key', 'disk io']
+  },
+
+  // --- CS301: Machine Learning Fundamentals Chunks ---
+  {
+    id: 'chk-ml-101',
+    docId: 'doc-ml-tb-1',
+    docTitle: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+    docType: 'textbook',
+    section: 'Chapter 1: Supervised Learning & Cost Functions',
+    text: `In supervised learning, the objective is to predict target values given input feature vectors. For linear regression, the hypothesis is h_theta(x) = theta^T x.
+The cost function measures discrepancy between predictions and true labels, typically formulated as Mean Squared Error (MSE):
+J(theta) = (1 / 2m) * sum_{i=1}^m (h_theta(x^(i)) - y^(i))^2.
+Gradient descent iteratively updates parameters in the direction of steepest descent:
+theta_j := theta_j - alpha * (d/d theta_j) J(theta),
+where alpha is the learning rate. If alpha is too small, gradient descent converges slowly. If alpha is too large, the algorithm can overshoot the global minimum, oscillating or diverging completely.`,
+    keywords: ['supervised learning', 'linear regression', 'cost function', 'mean squared error', 'gradient descent', 'learning rate']
+  },
+  {
+    id: 'chk-ml-102',
+    docId: 'doc-ml-tb-1',
+    docTitle: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+    docType: 'textbook',
+    section: 'Chapter 3.2: Bias-Variance Decomposition & Regularization',
+    text: `Generalization error can be decomposed into three components: Bias^2 + Variance + Irreducible Noise.
+1. High Bias (Underfitting): The model is too simple to capture underlying data structure (e.g. fitting a straight line to quadratic data). Both training and test errors are high.
+2. High Variance (Overfitting): The model fits training data too closely, capturing random noise. Training error is low, but test error is high.
+To prevent overfitting, regularization penalties are added to the cost function:
+L2 Regularization (Ridge): J_reg(theta) = J(theta) + lambda * sum(theta_j^2). Shrinks weights towards zero smoothly.
+L1 Regularization (Lasso): J_reg(theta) = J(theta) + lambda * sum(|theta_j|). Drives non-essential feature weights to exactly zero, performing automatic feature selection.`,
+    keywords: ['bias variance tradeoff', 'overfitting', 'underfitting', 'regularization', 'l1 lasso', 'l2 ridge', 'lambda']
+  },
+  {
+    id: 'chk-ml-103',
+    docId: 'doc-ml-tb-1',
+    docTitle: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+    docType: 'textbook',
+    section: 'Chapter 4.3: Logistic Regression & Cross-Entropy',
+    text: `For binary classification, linear regression predictions can exceed [0, 1]. Logistic regression maps continuous predictions to probabilities using the sigmoid function:
+g(z) = 1 / (1 + e^(-z)), where z = theta^T x.
+The hypothesis represents P(y = 1 | x; theta).
+Because Mean Squared Error produces a non-convex cost surface with multiple local minima when combined with the sigmoid function, logistic regression uses the convex Binary Cross-Entropy loss:
+J(theta) = -(1/m) * sum [ y^(i) * log(h_theta(x^(i))) + (1 - y^(i)) * log(1 - h_theta(x^(i))) ].
+This guarantees that gradient descent converges reliably to the global minimum.`,
+    keywords: ['logistic regression', 'sigmoid', 'binary cross-entropy', 'classification', 'convex loss', 'decision boundary']
+  },
+  {
+    id: 'chk-ml-104',
+    docId: 'doc-ml-tb-1',
+    docTitle: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+    docType: 'textbook',
+    section: 'Chapter 5: Neural Networks & Backpropagation',
+    text: `Multilayer Perceptrons (MLPs) extend linear models through compositions of hidden layers with nonlinear activation functions: a^(l) = sigma(W^(l) a^(l-1) + b^(l)).
+Training utilizes backpropagation to calculate partial derivatives of the loss with respect to all weights using the chain rule of calculus.
+A classic failure mode in deep architectures is the Vanishing Gradient problem: when using saturating activations like Sigmoid, gradients of activations for large magnitude inputs approach zero (sigma'(z) -> 0). When propagated back through multiple layers, gradients diminish exponentially, preventing early layers from learning.
+Modern architectures address this using the Rectified Linear Unit (ReLU): f(z) = max(0, z), whose derivative is 1 for positive inputs.`,
+    keywords: ['neural networks', 'backpropagation', 'vanishing gradient', 'relu', 'sigmoid', 'activation functions', 'chain rule']
   }
 ];
 
+// ==========================================================
+// 2. TOPICS (Operating Systems, Database Systems, Machine Learning)
+// ==========================================================
 export const SAMPLE_TOPICS: TopicNode[] = [
   {
     id: 'topic-cpu-sched',
-    courseId: 'course-cs301',
+    courseId: 'course-cs201',
     title: 'CPU Scheduling & Preemptive Algorithms',
     unit: 'Unit 1: Process Management & CPU Scheduling',
     description: 'Round Robin time quanta, Shortest Remaining Time First (SRTF), context-switch overhead, and processor sharing.',
     syllabusWeightage: 18,
     estimatedMinutesToMaster: 45,
     bloomLevel: 'Apply',
-    masteryStatus: 'untested',
-    subtopics: ['Round Robin (RR)', 'Shortest Remaining Time First (SRTF)', 'Context Switch Latency', 'Time Quantum Optimization'],
-    prerequisites: ['Process States', 'Process Control Block (PCB)'],
-    referenceSections: ['Chapter 5.2: Preemptive vs Nonpreemptive', 'Chapter 5.3: CPU Scheduling Algorithms']
+    masteryStatus: 'strong',
+    currentScore: 92,
+    attemptsCount: 3,
+    subtopics: [
+      'Round Robin (RR) Scheduling & Quantum Sizing',
+      'Shortest-Remaining-Time-First (SRTF) Preemption',
+      'Context Switch Overhead Calculations'
+    ],
+    prerequisites: ['Process Control Blocks (PCB)', 'CPU Burst Cycles'],
+    referenceSections: ['Chapter 5.2', 'Chapter 5.3']
   },
   {
     id: 'topic-critical-section',
-    courseId: 'course-cs301',
+    courseId: 'course-cs201',
     title: 'Critical Section & Concurrency Control',
-    unit: 'Unit 2: Synchronization & Concurrency',
-    description: 'Mutual Exclusion, Progress, Bounded Waiting conditions, race condition diagnosis, and lock primitives.',
-    syllabusWeightage: 20,
-    estimatedMinutesToMaster: 55,
-    bloomLevel: 'Analyze',
-    masteryStatus: 'untested',
-    subtopics: ['Race Conditions', 'Peterson Algorithm', 'Mutual Exclusion Criteria', 'Progress & Bounded Waiting'],
-    prerequisites: ['Shared Memory', 'Thread Execution'],
-    referenceSections: ['Chapter 6.2: The Critical-Section Problem', 'Problem 4: Concurrency & Synchronization Bug Diagnosis']
-  },
-  {
-    id: 'topic-semaphores-deadlock',
-    courseId: 'course-cs301',
-    title: 'Semaphores & Deadlock Prevention',
-    unit: 'Unit 2: Synchronization & Concurrency',
-    description: 'Counting vs Binary Semaphores, Coffman conditions, Circular Wait elimination via strict resource ordering.',
+    unit: 'Unit 2: Concurrency & Synchronization',
+    description: 'Mutual exclusion, progress, bounded waiting criteria, and atomic hardware primitives.',
     syllabusWeightage: 22,
     estimatedMinutesToMaster: 60,
+    bloomLevel: 'Analyze',
+    masteryStatus: 'medium',
+    currentScore: 68,
+    attemptsCount: 2,
+    subtopics: [
+      'The 3 Critical Section Requirements',
+      'Peterson’s 2-Process Algorithm',
+      'Atomic Test-and-Set & Compare-and-Swap'
+    ],
+    prerequisites: ['Thread Scheduling', 'Race Conditions'],
+    referenceSections: ['Chapter 6.2', 'Chapter 6.4']
+  },
+  {
+    id: 'topic-semaphores-deadlocks',
+    courseId: 'course-cs201',
+    title: 'Semaphores & Deadlock Prevention',
+    unit: 'Unit 2: Concurrency & Synchronization',
+    description: 'Counting semaphores, binary mutexes, Coffman conditions, and circular wait elimination.',
+    syllabusWeightage: 20,
+    estimatedMinutesToMaster: 50,
     bloomLevel: 'Evaluate',
-    masteryStatus: 'untested',
-    subtopics: ['Counting vs Binary Semaphores', 'Coffman 4 Conditions', 'Circular Wait Elimination', 'Resource Acquisition Hierarchies'],
-    prerequisites: ['Critical Section'],
-    referenceSections: ['Chapter 6.5: Semaphores and Mutexes', 'Chapter 7.2: Deadlock Characterization & Prevention']
+    masteryStatus: 'weak',
+    currentScore: 42,
+    attemptsCount: 2,
+    subtopics: [
+      'Counting vs Binary Semaphores (wait/signal)',
+      'The 4 Coffman Deadlock Conditions',
+      'Resource Acquisition Total Ordering'
+    ],
+    prerequisites: ['Critical Section', 'Mutual Exclusion'],
+    referenceSections: ['Chapter 6.5', 'Chapter 7.2', 'Exam Problem 4']
   },
   {
     id: 'topic-paging-tlb',
-    courseId: 'course-cs301',
+    courseId: 'course-cs201',
     title: 'Paging Architecture & TLB Effective Access Time',
     unit: 'Unit 3: Memory Management & Virtual Memory',
-    description: 'Two-level page tables, TLB hits/misses, and mathematical calculation of Effective Access Time (EAT).',
-    syllabusWeightage: 22,
-    estimatedMinutesToMaster: 50,
+    description: 'Frames, pages, page-table lookup penalties, and Translation Lookaside Buffer (TLB) mathematical derivations.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 65,
     bloomLevel: 'Apply',
-    masteryStatus: 'untested',
-    subtopics: ['Page vs Frame Addressing', 'Page Table Structure', 'TLB Hardware Cache', 'EAT Mathematical Derivations'],
-    prerequisites: ['Physical Memory Addressing', 'Binary Translation'],
-    referenceSections: ['Chapter 8.4: Paging & Translation Lookaside Buffer', 'Problem 7: Virtual Memory TLB EAT Calculation']
+    masteryStatus: 'weak',
+    currentScore: 35,
+    attemptsCount: 1,
+    subtopics: [
+      'Page Number (p) and Offset (d) Translation',
+      'Effective Access Time (EAT) Equations',
+      'Multi-Level Paging Latency Penalties'
+    ],
+    prerequisites: ['Physical Addressing', 'Hardware Caching'],
+    referenceSections: ['Chapter 8.4', 'Exam Problem 7']
   },
   {
     id: 'topic-page-replacement',
-    courseId: 'course-cs301',
+    courseId: 'course-cs201',
     title: 'Page Replacement Algorithms & Belady\'s Anomaly',
     unit: 'Unit 3: Memory Management & Virtual Memory',
-    description: 'FIFO vs LRU vs Optimal (MIN) algorithms, Belady Anomaly conditions, and Thrashing prevention using the Working Set Model.',
-    syllabusWeightage: 18,
+    description: 'FIFO, LRU stack algorithms, Optimal replacement, thrashing, and Belady anomaly proofs.',
+    syllabusWeightage: 15,
     estimatedMinutesToMaster: 40,
-    bloomLevel: 'Analyze',
-    masteryStatus: 'untested',
-    subtopics: ['FIFO Anomaly Demonstration', 'LRU Stack Mechanism', 'Optimal Page Replacement', 'Thrashing & Working Set'],
+    bloomLevel: 'Understand',
+    masteryStatus: 'medium',
+    currentScore: 60,
+    attemptsCount: 2,
+    subtopics: [
+      'FIFO vs LRU Replacement Comparison',
+      'Belady’s Anomaly Anomaly Mechanics',
+      'Working-Set Model & Thrashing Prevention'
+    ],
     prerequisites: ['Paging Architecture'],
-    referenceSections: ['Chapter 9.4: Page Replacement Algorithms & Belady Anomaly']
+    referenceSections: ['Chapter 9.4']
   }
 ];
 
+export const DBMS_TOPICS: TopicNode[] = [
+  {
+    id: 'topic-db-norm',
+    courseId: 'course-cs202',
+    title: 'Relational Model & Normalization (1NF to BCNF)',
+    unit: 'Unit 1: Relational Theory & Schema Design',
+    description: 'Functional dependencies, candidate keys, 3NF synthesis, and Boyce-Codd Normal Form (BCNF) decomposition.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 55,
+    bloomLevel: 'Analyze',
+    masteryStatus: 'strong',
+    currentScore: 88,
+    attemptsCount: 3,
+    subtopics: ['Functional Dependencies & Armstrong Axioms', '3NF vs BCNF Conditions', 'Lossless Join & Dependency Preservation'],
+    prerequisites: ['Relational Algebra'],
+    referenceSections: ['Chapter 7.1', 'Chapter 7.4']
+  },
+  {
+    id: 'topic-db-acid',
+    courseId: 'course-cs202',
+    title: 'Transaction Management & ACID Guarantees',
+    unit: 'Unit 2: Transactions & Recovery',
+    description: 'Atomicity, Consistency, Isolation, Durability, Write-Ahead Logging (WAL), and checkpointing.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 50,
+    bloomLevel: 'Understand',
+    masteryStatus: 'medium',
+    currentScore: 74,
+    attemptsCount: 2,
+    subtopics: ['ACID Definitions', 'Write-Ahead Logging (WAL)', 'Deferred vs Immediate Modification'],
+    prerequisites: ['Relational Storage'],
+    referenceSections: ['Chapter 14.1']
+  },
+  {
+    id: 'topic-db-2pl',
+    courseId: 'course-cs202',
+    title: 'Concurrency Control & Two-Phase Locking (2PL)',
+    unit: 'Unit 3: Concurrency Control',
+    description: 'Conflict serializability, precedence graphs, Strict 2PL, Rigorous 2PL, and avoiding cascading aborts.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 60,
+    bloomLevel: 'Apply',
+    masteryStatus: 'weak',
+    currentScore: 48,
+    attemptsCount: 2,
+    subtopics: ['Precedence Graphs & Cycle Detection', 'Growing vs Shrinking Lock Phases', 'Strict vs Rigorous 2PL Guarantees'],
+    prerequisites: ['Transactions ACID'],
+    referenceSections: ['Chapter 15.1', 'Chapter 15.2']
+  },
+  {
+    id: 'topic-db-index',
+    courseId: 'course-cs202',
+    title: 'Database Indexing & B+ Tree Architectures',
+    unit: 'Unit 4: Storage & Indexing',
+    description: 'Dense vs sparse indices, B+ tree node splitting, height calculations, and logarithmic range search.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 45,
+    bloomLevel: 'Apply',
+    masteryStatus: 'medium',
+    currentScore: 66,
+    attemptsCount: 2,
+    subtopics: ['B+ Tree Node Structure & Fanout', 'Search & Range Query Traversal', 'Splitting & Merging Invariants'],
+    prerequisites: ['File Organization'],
+    referenceSections: ['Chapter 11.2']
+  }
+];
+
+export const ML_TOPICS: TopicNode[] = [
+  {
+    id: 'topic-ml-grad',
+    courseId: 'course-cs301',
+    title: 'Cost Functions & Gradient Descent Optimization',
+    unit: 'Unit 1: Supervised Regression & Optimization',
+    description: 'Mean Squared Error (MSE), batch vs stochastic gradient descent, learning rate alpha, and divergence.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 50,
+    bloomLevel: 'Apply',
+    masteryStatus: 'strong',
+    currentScore: 90,
+    attemptsCount: 3,
+    subtopics: ['MSE Cost Formulation', 'Gradient Update Equations', 'Learning Rate Oscillations & Divergence'],
+    prerequisites: ['Multivariate Calculus', 'Linear Algebra'],
+    referenceSections: ['Chapter 1.1', 'Chapter 1.2']
+  },
+  {
+    id: 'topic-ml-reg',
+    courseId: 'course-cs301',
+    title: 'Bias-Variance Tradeoff & Regularization (L1 / L2)',
+    unit: 'Unit 2: Generalization & Model Selection',
+    description: 'Underfitting vs overfitting, L2 Ridge penalty weight shrinkage, and L1 Lasso sparsity feature selection.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 55,
+    bloomLevel: 'Analyze',
+    masteryStatus: 'weak',
+    currentScore: 44,
+    attemptsCount: 2,
+    subtopics: ['Bias-Variance Decomposition', 'Ridge L2 Weight Decay', 'Lasso L1 Sparsity Penalization'],
+    prerequisites: ['Linear Regression'],
+    referenceSections: ['Chapter 3.2']
+  },
+  {
+    id: 'topic-ml-logistic',
+    courseId: 'course-cs301',
+    title: 'Logistic Regression & Cross-Entropy Loss',
+    unit: 'Unit 3: Classification & Probability',
+    description: 'Sigmoid activation, probability mapping, binary cross-entropy cost convexity, and decision boundaries.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 50,
+    bloomLevel: 'Understand',
+    masteryStatus: 'strong',
+    currentScore: 84,
+    attemptsCount: 2,
+    subtopics: ['Sigmoid Function Non-Linearity', 'Binary Cross-Entropy Loss', 'Decision Boundary Equations'],
+    prerequisites: ['Gradient Descent'],
+    referenceSections: ['Chapter 4.3']
+  },
+  {
+    id: 'topic-ml-nn',
+    courseId: 'course-cs301',
+    title: 'Neural Networks & Vanishing Gradients',
+    unit: 'Unit 4: Deep Learning Foundations',
+    description: 'Multilayer perceptrons, chain rule backpropagation, vanishing gradient problem, and ReLU activations.',
+    syllabusWeightage: 25,
+    estimatedMinutesToMaster: 65,
+    bloomLevel: 'Evaluate',
+    masteryStatus: 'medium',
+    currentScore: 62,
+    attemptsCount: 2,
+    subtopics: ['Backpropagation Chain Rule', 'Vanishing Gradients in Sigmoid Networks', 'ReLU Non-Saturating Activation'],
+    prerequisites: ['Logistic Regression'],
+    referenceSections: ['Chapter 5.1', 'Chapter 5.3']
+  }
+];
+
+// ==========================================================
+// 3. DOCUMENTS (Operating Systems, Database Systems, Machine Learning)
+// ==========================================================
 export const SAMPLE_DOCUMENTS: UploadedDocument[] = [
   {
     id: 'doc-syl-1',
-    courseId: 'course-cs301',
-    title: 'Official Syllabus - CS301 Operating Systems Core (Accredited)',
+    courseId: 'course-cs201',
+    title: 'Official Syllabus - CS201 Operating Systems Core (Accredited)',
     type: 'syllabus',
-    content: `# CS301 Operating Systems Syllabus
-Course Objective: Understand core principles of process management, concurrent synchronization, virtual memory hierarchies, and storage systems.
-Unit 1: Process Management & Scheduling (18% Weightage)
-- CPU scheduling algorithms (FCFS, SJF, SRTF, Round Robin)
-- Context switching overhead and quantum trade-offs
-Unit 2: Synchronization & Deadlocks (42% Weightage)
-- Critical section requirements: Mutual Exclusion, Progress, Bounded Waiting
-- Semaphores (counting vs binary), atomic primitives
-- Deadlock characterization (4 Coffman conditions) and prevention via hierarchical ordering
-Unit 3: Memory Management (40% Weightage)
-- Paging, Translation Lookaside Buffer (TLB), Effective Access Time calculations
-- Page replacement algorithms: FIFO, LRU, Optimal
-- Belady's Anomaly and Thrashing mechanisms`,
+    content: `Official University Syllabus for CS201: Operating Systems & System Architecture. Unit 1: Process Management & CPU Scheduling (18%). Unit 2: Concurrency & Synchronization (42%). Unit 3: Memory Management & Paging (40%).`,
     chunks: [
       {
         id: 'chk-syl-1',
         docId: 'doc-syl-1',
-        docTitle: 'Official Syllabus - CS301 Operating Systems Core (Accredited)',
+        docTitle: 'Official Syllabus - CS201 Operating Systems Core (Accredited)',
         docType: 'syllabus',
         section: 'Course Overview & Weightage Table',
         text: 'Unit 1: CPU Scheduling (18%), Unit 2: Synchronization & Deadlocks (42%), Unit 3: Memory Management & Paging (40%). Total exam score: 100 points.',
@@ -259,7 +517,7 @@ Unit 3: Memory Management (40% Weightage)
   },
   {
     id: 'doc-tb-1',
-    courseId: 'course-cs301',
+    courseId: 'course-cs201',
     title: 'Operating Systems Principles (8th Ed) - Silberschatz & Galvin',
     type: 'textbook',
     content: `Core Textbook Chapters covering CPU Scheduling, Semaphores, Deadlocks, Paging, and Page Replacement Algorithms.`,
@@ -269,7 +527,7 @@ Unit 3: Memory Management (40% Weightage)
   },
   {
     id: 'doc-exam-1',
-    courseId: 'course-cs301',
+    courseId: 'course-cs201',
     title: 'University Midterm Exam 2024 - Computer Systems Architecture',
     type: 'past_papers',
     content: `Selected Midterm examination problems with instructor model solutions and analytical explanations.`,
@@ -279,7 +537,77 @@ Unit 3: Memory Management (40% Weightage)
   }
 ];
 
+export const DBMS_DOCUMENTS: UploadedDocument[] = [
+  {
+    id: 'doc-db-syl-1',
+    courseId: 'course-cs202',
+    title: 'Official Syllabus - CS202 Database Management Systems',
+    type: 'syllabus',
+    content: `Official Syllabus for CS202 Database Systems. Unit 1: Normalization (25%), Unit 2: Transactions & ACID (25%), Unit 3: Concurrency Control (25%), Unit 4: B+ Tree Indexing (25%).`,
+    chunks: [
+      {
+        id: 'chk-db-syl-1',
+        docId: 'doc-db-syl-1',
+        docTitle: 'Official Syllabus - CS202 Database Management Systems',
+        docType: 'syllabus',
+        section: 'Curriculum & Weightage',
+        text: 'Unit 1: Normalization (25%), Unit 2: Transactions (25%), Unit 3: Concurrency (25%), Unit 4: Indexing (25%).',
+        keywords: ['syllabus', 'database', 'weightage', 'normalization', 'concurrency']
+      }
+    ],
+    uploadDate: '2026-10-20',
+    sizeBytes: 13500
+  },
+  {
+    id: 'doc-db-tb-1',
+    courseId: 'course-cs202',
+    title: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+    type: 'textbook',
+    content: `Standard text covering BCNF, ACID properties, 2-Phase Locking, and B+ Tree indexing.`,
+    chunks: SAMPLE_CHUNKS.filter(c => c.docId === 'doc-db-tb-1'),
+    uploadDate: '2026-10-20',
+    sizeBytes: 780000
+  }
+];
+
+export const ML_DOCUMENTS: UploadedDocument[] = [
+  {
+    id: 'doc-ml-syl-1',
+    courseId: 'course-cs301',
+    title: 'Official Syllabus - CS301 Machine Learning Fundamentals',
+    type: 'syllabus',
+    content: `Official Syllabus for CS301 Machine Learning. Unit 1: Gradient Descent (25%), Unit 2: Regularization (25%), Unit 3: Classification (25%), Unit 4: Neural Networks (25%).`,
+    chunks: [
+      {
+        id: 'chk-ml-syl-1',
+        docId: 'doc-ml-syl-1',
+        docTitle: 'Official Syllabus - CS301 Machine Learning Fundamentals',
+        docType: 'syllabus',
+        section: 'Curriculum & Weightage',
+        text: 'Unit 1: Optimization (25%), Unit 2: Bias-Variance (25%), Unit 3: Logistic Regression (25%), Unit 4: Deep Learning (25%).',
+        keywords: ['syllabus', 'machine learning', 'gradient descent', 'regularization', 'neural networks']
+      }
+    ],
+    uploadDate: '2026-10-20',
+    sizeBytes: 14100
+  },
+  {
+    id: 'doc-ml-tb-1',
+    courseId: 'course-cs301',
+    title: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+    type: 'textbook',
+    content: `Foundational text on regression, bias-variance tradeoff, cross-entropy, and backpropagation.`,
+    chunks: SAMPLE_CHUNKS.filter(c => c.docId === 'doc-ml-tb-1'),
+    uploadDate: '2026-10-20',
+    sizeBytes: 920000
+  }
+];
+
+// ==========================================================
+// 4. QUIZ QUESTIONS (Grounded in chunks with citations)
+// ==========================================================
 export const SAMPLE_QUIZ_QUESTIONS: QuizQuestion[] = [
+  // --- CS201 OS Questions ---
   {
     id: 'q-cpu-1',
     topicId: 'topic-cpu-sched',
@@ -323,25 +651,25 @@ export const SAMPLE_QUIZ_QUESTIONS: QuizQuestion[] = [
       docTitle: 'Operating Systems Principles (8th Ed) - Silberschatz & Galvin',
       docType: 'textbook',
       section: 'Chapter 6.2: The Critical-Section Problem',
-      snippet: 'A solution to the critical-section problem must satisfy three criteria: 1. Mutual Exclusion, 2. Progress, 3. Bounded Waiting.'
+      snippet: 'A solution to the critical-section problem must satisfy three criteria: Mutual Exclusion, Progress, and Bounded Waiting.'
     },
-    difficulty: 'easy',
+    difficulty: 'medium',
     type: 'concept_check'
   },
   {
     id: 'q-dead-1',
-    topicId: 'topic-semaphores-deadlock',
+    topicId: 'topic-semaphores-deadlocks',
     topicTitle: 'Semaphores & Deadlock Prevention',
-    question: 'A deadlock occurs between Thread 1 (holding Lock A, requesting Lock B) and Thread 2 (holding Lock B, requesting Lock A). Which Coffman condition does this directly establish, and what is the standard prevention protocol?',
+    question: 'A junior engineer wrote locking code where Thread 1 acquires lock A then B, while Thread 2 acquires lock B then A. Which Coffman condition is directly satisfied, enabling deadlock, and how is it prevented?',
     options: [
-      'No Preemption; solved by terminating Thread 2 immediately',
-      'Circular Wait; prevented by enforcing a global numerical acquisition order (e.g., always acquire Lock A before Lock B)',
-      'Hold and Wait; prevented by multiplying the time slice quantum',
-      'Mutual Exclusion; prevented by converting all locks to read-only access'
+      'Hold and Wait; prevented by allocating all resources at process startup',
+      'Circular Wait; prevented by enforcing a global resource acquisition ordering (e.g. acquire A before B in both threads)',
+      'Mutual Exclusion; prevented by sharing lock variables without synchronization',
+      'No Preemption; prevented by forcibly aborting lower priority threads on contention'
     ],
     correctOptionIndex: 1,
-    explanation: 'The scenario is the textbook Circular Wait condition (T1 -> B held by T2 -> A held by T1). The standard operating system prevention strategy is imposing a total ordering on resources and forcing all threads to acquire locks in strictly increasing order.',
-    misconceptionExplanation: 'Students often know that deadlocks have 4 conditions, but fail to identify Circular Wait as the single condition easily prevented programmatically via resource hierarchies.',
+    explanation: 'When Thread 1 holds A and waits for B, while Thread 2 holds B and waits for A, a Circular Wait graph cycle forms. Imposing a global linear order on resource acquisitions (A < B) mathematically breaks the possibility of circular wait.',
+    misconceptionExplanation: 'Students frequently misdiagnose this as a failure of Mutual Exclusion, when in reality mutual exclusion is functioning as designed—the vulnerability is the circular dependency of acquisition orders.',
     citation: {
       docId: 'doc-exam-1',
       docTitle: 'University Midterm Exam 2024 - Computer Systems Architecture',
@@ -399,13 +727,116 @@ export const SAMPLE_QUIZ_QUESTIONS: QuizQuestion[] = [
     },
     difficulty: 'medium',
     type: 'concept_check'
+  },
+
+  // --- CS202 DBMS Questions ---
+  {
+    id: 'q-db-norm-1',
+    topicId: 'topic-db-norm',
+    topicTitle: 'Relational Model & Normalization (1NF to BCNF)',
+    question: 'Under what condition is a relation schema R strictly in Boyce-Codd Normal Form (BCNF) with respect to functional dependency set F?',
+    options: [
+      'Every non-prime attribute is fully functionally dependent on a candidate key',
+      'For every non-trivial functional dependency alpha -> beta, alpha is a superkey of R',
+      'Every attribute in beta is a prime attribute contained in some candidate key',
+      'The relation has no multi-valued dependencies'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'BCNF requires that for every non-trivial dependency alpha -> beta, alpha must be a superkey. If an attribute on the right is prime but alpha is not a superkey, the schema may be in 3NF but fails BCNF.',
+    misconceptionExplanation: 'Students frequently confuse 3NF and BCNF. 3NF allows alpha not to be a superkey if beta is prime; BCNF removes this relaxation.',
+    citation: {
+      docId: 'doc-db-tb-1',
+      docTitle: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+      docType: 'textbook',
+      section: 'Chapter 7: Relational Database Normalization',
+      snippet: 'A relation schema R is in BCNF if for all alpha -> beta in F+, either alpha -> beta is trivial, or alpha is a superkey for schema R.'
+    },
+    difficulty: 'medium',
+    type: 'concept_check'
+  },
+  {
+    id: 'q-db-2pl-1',
+    topicId: 'topic-db-2pl',
+    topicTitle: 'Concurrency Control & Two-Phase Locking (2PL)',
+    question: 'How does Strict Two-Phase Locking (Strict 2PL) differ from standard basic Two-Phase Locking (2PL)?',
+    options: [
+      'Strict 2PL prevents deadlocks while basic 2PL does not',
+      'Strict 2PL requires all Exclusive (X) locks to be held until transaction commit/abort, preventing cascading rollbacks',
+      'Strict 2PL does not allow shared (S) read locks',
+      'Strict 2PL releases locks as soon as the write operation finishes'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'Basic 2PL allows locks to be released during the shrinking phase before commit, which can cause cascading aborts if another transaction reads uncommitted data. Strict 2PL holds exclusive locks until commit, guaranteeing strictness and avoiding cascading aborts.',
+    misconceptionExplanation: '2PL does NOT prevent deadlocks! Both basic 2PL and Strict 2PL can still deadlock and require wait-for graphs or timeouts.',
+    citation: {
+      docId: 'doc-db-tb-1',
+      docTitle: 'Database System Concepts (7th Ed) - Silberschatz, Korth & Sudarshan',
+      docType: 'textbook',
+      section: 'Chapter 15: Concurrency Control & Two-Phase Locking',
+      snippet: 'Strict 2PL requires that all exclusive locks acquired by a transaction be held until the transaction commits or aborts, preventing cascading aborts.'
+    },
+    difficulty: 'hard',
+    type: 'application_problem'
+  },
+
+  // --- CS301 ML Questions ---
+  {
+    id: 'q-ml-grad-1',
+    topicId: 'topic-ml-grad',
+    topicTitle: 'Cost Functions & Gradient Descent Optimization',
+    question: 'During gradient descent for linear regression, what occurs if the learning rate alpha is chosen to be excessively large?',
+    options: [
+      'Gradient descent converges to a suboptimal local minimum rather than the global minimum',
+      'The parameter updates overshoot the valley minimum, causing the cost function J(theta) to oscillate or diverge to infinity',
+      'The model suffers from excessive variance and overfits the training set',
+      'Parameters become sparse with many weights driven to exactly zero'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'When alpha is too large, each step overshoots the minimum point on the convex MSE surface. The distance from the minimum increases with each iteration, causing divergence.',
+    misconceptionExplanation: 'Linear regression MSE is strictly convex with NO local minima! Thus, large learning rate causes divergence, not trapping in local minima.',
+    citation: {
+      docId: 'doc-ml-tb-1',
+      docTitle: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+      docType: 'textbook',
+      section: 'Chapter 1: Supervised Learning & Cost Functions',
+      snippet: 'If alpha is too large, the algorithm can overshoot the global minimum, oscillating or diverging completely.'
+    },
+    difficulty: 'medium',
+    type: 'concept_check'
+  },
+  {
+    id: 'q-ml-reg-1',
+    topicId: 'topic-ml-reg',
+    topicTitle: 'Bias-Variance Tradeoff & Regularization (L1 / L2)',
+    question: 'What is the key geometric and practical difference between L1 Regularization (Lasso) and L2 Regularization (Ridge)?',
+    options: [
+      'L2 produces sparse models with exact zero weights, while L1 only shrinks weights smoothly',
+      'L1 regularization drives non-essential feature weights to exactly zero performing feature selection, due to the diamond constraint corners',
+      'L1 only applies to classification, while L2 only applies to regression',
+      'L2 regularization increases model variance compared to unregularized regression'
+    ],
+    correctOptionIndex: 1,
+    explanation: 'The L1 norm constraint has sharp corners on the coordinate axes. The contours of the loss function frequently intersect these corners first, setting redundant feature weights to exactly zero.',
+    misconceptionExplanation: 'A classic mistake is reversing L1 and L2: Ridge (L2) shrinks weights close to zero but rarely exactly zero; Lasso (L1) creates exact zero weights.',
+    citation: {
+      docId: 'doc-ml-tb-1',
+      docTitle: 'Pattern Recognition and Machine Learning - Christopher Bishop',
+      docType: 'textbook',
+      section: 'Chapter 3.2: Bias-Variance Decomposition & Regularization',
+      snippet: 'L1 Regularization (Lasso) drives non-essential feature weights to exactly zero, performing automatic feature selection.'
+    },
+    difficulty: 'hard',
+    type: 'application_problem'
   }
 ];
 
-export const INITIAL_PRELOADED_COURSE: Course = {
-  id: 'course-cs301',
-  title: 'CS301: Operating Systems & System Architecture',
-  subjectCode: 'CS-301-CORE',
+// ==========================================================
+// 5. PRELOADED COURSES
+// ==========================================================
+export const CS201_COURSE: Course = {
+  id: 'course-cs201',
+  title: 'CS201: Operating Systems',
+  subjectCode: 'CS-201',
   description: 'Undergraduate core computer science course covering CPU scheduling, thread concurrency, semaphores, virtual memory TLBs, and page replacement mechanics.',
   targetExam: 'Final University Examination (Dec 2026)',
   documents: SAMPLE_DOCUMENTS,
@@ -413,11 +844,41 @@ export const INITIAL_PRELOADED_COURSE: Course = {
   isPreloaded: true
 };
 
+export const CS202_COURSE: Course = {
+  id: 'course-cs202',
+  title: 'CS202: Database Management Systems',
+  subjectCode: 'CS-202',
+  description: 'Undergraduate database theory course covering relational algebra, BCNF normalization, ACID transactions, 2-Phase Locking (2PL), and B+ Tree indexing.',
+  targetExam: 'Midterm & Final Examination',
+  documents: DBMS_DOCUMENTS,
+  topics: DBMS_TOPICS,
+  isPreloaded: true
+};
+
+export const CS301_COURSE: Course = {
+  id: 'course-cs301',
+  title: 'CS301: Machine Learning Fundamentals',
+  subjectCode: 'CS-301',
+  description: 'Core machine learning course covering supervised learning, gradient descent optimization, cost functions, regularization (L1/L2), and neural network backpropagation.',
+  targetExam: 'University Comprehensive Assessment',
+  documents: ML_DOCUMENTS,
+  topics: ML_TOPICS,
+  isPreloaded: true
+};
+
+// Backwards-compatible aliases
+export const INITIAL_PRELOADED_COURSE: Course = CS201_COURSE;
+export const PRELOADED_COURSES: Course[] = [CS201_COURSE, CS202_COURSE, CS301_COURSE];
+
+// ==========================================================
+// 6. TEACHER SUBJECTS & STUDENT PERFORMANCE ROSTER
+// ==========================================================
 export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
+  // Subject 1: CS201 Operating Systems
   {
-    id: 'subj-cs301',
-    subjectTitle: 'CS301: Operating Systems & System Architecture',
-    subjectCode: 'CS-301-CORE',
+    id: 'subj-cs201',
+    subjectTitle: 'CS201: Operating Systems',
+    subjectCode: 'CS-201',
     semester: 'Fall Semester 2026 (Section A)',
     enrolledStudentsCount: 30,
     activeSignedInCount: 28,
@@ -427,11 +888,11 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
     commonWeakTopic: 'Virtual Memory & Paging (FIFO Belady\'s Anomaly)',
     students: [
       {
-        id: 'std-1',
-        name: 'Alex Rivera',
-        email: 'alex.rivera@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        id: 'std-alex-chen-os',
+        name: 'Alex Chen',
+        email: 'alex.chen@gapfinder.demo',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 4,
         overallScore: 74,
         performanceTier: 'Proficient',
@@ -448,11 +909,32 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         }
       },
       {
+        id: 'std-priya-sharma-os',
+        name: 'Priya Sharma',
+        email: 'priya.sharma@gapfinder.demo',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
+        quizzesAttempted: 4,
+        overallScore: 81,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Banker\'s Safety Vector Calculations',
+        strongestTopic: 'Counting Semaphores vs Binary Mutex',
+        primaryCognitiveGap: 'Application / Formula Slip',
+        lastActive: 'Today, 1:10 PM',
+        recommendedRemedial: 'Practice Available, Allocation, Max matrix subtraction exercises.',
+        topicScores: {
+          'CPU Scheduling': 86,
+          'Process Synchronization': 88,
+          'Deadlock Handling': 76,
+          'Virtual Memory Paging': 74
+        }
+      },
+      {
         id: 'std-2',
         name: 'Maya Patel',
         email: 'maya.patel@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 5,
         overallScore: 92,
         performanceTier: 'High Distinction',
@@ -472,8 +954,8 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         id: 'std-3',
         name: 'David Kim',
         email: 'david.kim@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 2,
         overallScore: 42,
         performanceTier: 'Critical Gap',
@@ -493,8 +975,8 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         id: 'std-4',
         name: 'Elena Rostova',
         email: 'elena.rostova@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 5,
         overallScore: 88,
         performanceTier: 'High Distinction',
@@ -514,8 +996,8 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         id: 'std-5',
         name: 'Marcus Johnson',
         email: 'marcus.j@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 3,
         overallScore: 51,
         performanceTier: 'Needs Attention',
@@ -532,32 +1014,11 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         }
       },
       {
-        id: 'std-6',
-        name: 'Priya Sharma',
-        email: 'priya.sharma@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
-        quizzesAttempted: 4,
-        overallScore: 81,
-        performanceTier: 'High Distinction',
-        weakestTopic: 'Banker\'s Safety Vector Calculations',
-        strongestTopic: 'Counting Semaphores vs Binary Mutex',
-        primaryCognitiveGap: 'Application / Formula Slip',
-        lastActive: 'Today, 1:10 PM',
-        recommendedRemedial: 'Practice Available, Allocation, Max matrix subtraction exercises.',
-        topicScores: {
-          'CPU Scheduling': 86,
-          'Process Synchronization': 88,
-          'Deadlock Handling': 76,
-          'Virtual Memory Paging': 74
-        }
-      },
-      {
         id: 'std-7',
         name: 'Liam O\'Connor',
         email: 'liam.oc@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 1,
         overallScore: 38,
         performanceTier: 'Critical Gap',
@@ -577,8 +1038,8 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         id: 'std-8',
         name: 'Sophia Zhang',
         email: 'sophia.zhang@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
+        enrolledSubject: 'CS201: Operating Systems',
+        subjectCode: 'CS-201',
         quizzesAttempted: 6,
         overallScore: 96,
         performanceTier: 'High Distinction',
@@ -593,97 +1054,15 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
           'Deadlock Handling': 94,
           'Virtual Memory Paging': 96
         }
-      },
-      {
-        id: 'std-9',
-        name: 'Lucas Garcia',
-        email: 'lucas.g@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
-        quizzesAttempted: 3,
-        overallScore: 66,
-        performanceTier: 'Proficient',
-        weakestTopic: 'Counting Semaphores vs Binary Mutex',
-        strongestTopic: 'Round Robin Time Quantum Selection',
-        primaryCognitiveGap: 'Conceptual Misunderstanding',
-        lastActive: 'Yesterday',
-        recommendedRemedial: 'Review producer-consumer bounded-buffer code implementation with empty/full semaphores.',
-        topicScores: {
-          'CPU Scheduling': 82,
-          'Process Synchronization': 54,
-          'Deadlock Handling': 66,
-          'Virtual Memory Paging': 62
-        }
-      },
-      {
-        id: 'std-10',
-        name: 'Aisha Al-Mansoor',
-        email: 'aisha.m@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
-        quizzesAttempted: 3,
-        overallScore: 61,
-        performanceTier: 'Proficient',
-        weakestTopic: 'Deadlock Detection vs Prevention',
-        strongestTopic: 'SRTF Scheduling Preemption',
-        primaryCognitiveGap: 'Recall Failure',
-        lastActive: 'Today, 10:15 AM',
-        recommendedRemedial: 'Review differences between avoidance (Banker\'s), prevention (breaking Coffman), and detection (wait-for graphs).',
-        topicScores: {
-          'CPU Scheduling': 76,
-          'Process Synchronization': 64,
-          'Deadlock Handling': 50,
-          'Virtual Memory Paging': 54
-        }
-      },
-      {
-        id: 'std-11',
-        name: 'Noah Bennett',
-        email: 'noah.b@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
-        quizzesAttempted: 4,
-        overallScore: 84,
-        performanceTier: 'High Distinction',
-        weakestTopic: 'Bounded Waiting Criteria',
-        strongestTopic: 'TLB Paging Address Translation',
-        primaryCognitiveGap: 'Conceptual Misunderstanding',
-        lastActive: 'Today, 12:00 PM',
-        recommendedRemedial: 'Clarify distinction between progress and bounded waiting in Peterson\'s algorithm.',
-        topicScores: {
-          'CPU Scheduling': 88,
-          'Process Synchronization': 78,
-          'Deadlock Handling': 82,
-          'Virtual Memory Paging': 88
-        }
-      },
-      {
-        id: 'std-12',
-        name: 'Chloe Dubois',
-        email: 'chloe.d@university.edu',
-        enrolledSubject: 'CS301: Operating Systems',
-        subjectCode: 'CS-301',
-        quizzesAttempted: 2,
-        overallScore: 47,
-        performanceTier: 'Needs Attention',
-        weakestTopic: 'Shortest Job First Starvation',
-        strongestTopic: 'Round Robin Quantum Context Switching',
-        primaryCognitiveGap: 'Recall Failure',
-        lastActive: '4 days ago',
-        recommendedRemedial: 'Encourage student to complete Diagnostic Quiz 2 on Synchronization & Deadlocks.',
-        topicScores: {
-          'CPU Scheduling': 55,
-          'Process Synchronization': 42,
-          'Deadlock Handling': 44,
-          'Virtual Memory Paging': 47
-        }
       }
     ]
   },
+
+  // Subject 2: CS202 Database Management Systems
   {
-    id: 'subj-cs204',
-    subjectTitle: 'CS204: Database Management Systems',
-    subjectCode: 'CS-204-DB',
+    id: 'subj-cs202',
+    subjectTitle: 'CS202: Database Management Systems',
+    subjectCode: 'CS-202',
     semester: 'Fall Semester 2026 (Section B)',
     enrolledStudentsCount: 34,
     activeSignedInCount: 31,
@@ -693,11 +1072,11 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
     commonWeakTopic: 'B+ Tree Indexing & 2-Phase Locking (2PL)',
     students: [
       {
-        id: 'std-201',
-        name: 'Alex Rivera',
-        email: 'alex.rivera@university.edu',
-        enrolledSubject: 'CS204: Database Systems',
-        subjectCode: 'CS-204',
+        id: 'std-alex-chen-db',
+        name: 'Alex Chen',
+        email: 'alex.chen@gapfinder.demo',
+        enrolledSubject: 'CS202: Database Systems',
+        subjectCode: 'CS-202',
         quizzesAttempted: 3,
         overallScore: 78,
         performanceTier: 'Proficient',
@@ -717,8 +1096,8 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         id: 'std-202',
         name: 'Maya Patel',
         email: 'maya.patel@university.edu',
-        enrolledSubject: 'CS204: Database Systems',
-        subjectCode: 'CS-204',
+        enrolledSubject: 'CS202: Database Systems',
+        subjectCode: 'CS-202',
         quizzesAttempted: 4,
         overallScore: 94,
         performanceTier: 'High Distinction',
@@ -738,8 +1117,8 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
         id: 'std-203',
         name: 'David Kim',
         email: 'david.kim@university.edu',
-        enrolledSubject: 'CS204: Database Systems',
-        subjectCode: 'CS-204',
+        enrolledSubject: 'CS202: Database Systems',
+        subjectCode: 'CS-202',
         quizzesAttempted: 2,
         overallScore: 49,
         performanceTier: 'Needs Attention',
@@ -757,61 +1136,83 @@ export const TEACHER_SUBJECTS_DATA: TeacherSubjectClass[] = [
       }
     ]
   },
+
+  // Subject 3: CS301 Machine Learning Fundamentals
   {
-    id: 'subj-cs402',
-    subjectTitle: 'CS402: Distributed Systems & Cloud Computing',
-    subjectCode: 'CS-402-DIST',
-    semester: 'Fall Semester 2026 (Advanced Elective)',
-    enrolledStudentsCount: 22,
-    activeSignedInCount: 20,
-    classAverageScore: 64,
-    criticalGapCount: 4,
-    topPerformersCount: 5,
-    commonWeakTopic: 'Raft / Paxos Consensus Quorum Leader Election',
+    id: 'subj-cs301',
+    subjectTitle: 'CS301: Machine Learning Fundamentals',
+    subjectCode: 'CS-301',
+    semester: 'Fall Semester 2026 (Advanced Core)',
+    enrolledStudentsCount: 26,
+    activeSignedInCount: 24,
+    classAverageScore: 76,
+    criticalGapCount: 2,
+    topPerformersCount: 9,
+    commonWeakTopic: 'Bias-Variance Tradeoff & L1 vs L2 Regularization',
     students: [
+      {
+        id: 'std-priya-sharma-ml',
+        name: 'Priya Sharma',
+        email: 'priya.sharma@gapfinder.demo',
+        enrolledSubject: 'CS301: Machine Learning',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 4,
+        overallScore: 88,
+        performanceTier: 'High Distinction',
+        weakestTopic: 'Gradient Descent Learning Rate Oscillations',
+        strongestTopic: 'Supervised Learning Cost Functions',
+        primaryCognitiveGap: 'Application / Formula Slip',
+        lastActive: 'Today, 2:30 PM',
+        recommendedRemedial: 'Practice step-size updates with learning rate decay schedules.',
+        topicScores: {
+          'Cost Functions & Gradients': 92,
+          'Bias-Variance & Regularization': 80,
+          'Logistic Regression': 90,
+          'Neural Net Backprop': 88
+        }
+      },
       {
         id: 'std-401',
         name: 'Sophia Zhang',
         email: 'sophia.zhang@university.edu',
-        enrolledSubject: 'CS402: Distributed Systems',
-        subjectCode: 'CS-402',
-        quizzesAttempted: 4,
+        enrolledSubject: 'CS301: Machine Learning',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 5,
         overallScore: 95,
         performanceTier: 'High Distinction',
-        weakestTopic: 'Vector Clock Concurrency Causality',
-        strongestTopic: 'CAP Theorem & Eventual Consistency',
+        weakestTopic: 'None (Full Mastery)',
+        strongestTopic: 'Backpropagation & Neural Networks',
         primaryCognitiveGap: 'None (Mastered)',
         lastActive: 'Today, 2:30 PM',
-        recommendedRemedial: 'Advanced study: Byzantine Fault Tolerant (BFT) consensus algorithms.',
+        recommendedRemedial: 'Advanced study: Transformers and Self-Attention mechanisms.',
         topicScores: {
-          'Lamport Timestamps & Vector Clocks': 92,
-          'Consensus (Raft/Paxos)': 96,
-          'Distributed Transactions (2PC)': 98,
-          'CAP Theorem & Replication': 94
+          'Cost Functions & Gradients': 96,
+          'Bias-Variance & Regularization': 94,
+          'Logistic Regression': 98,
+          'Neural Net Backprop': 92
         }
       },
       {
         id: 'std-402',
         name: 'Liam O\'Connor',
         email: 'liam.oc@university.edu',
-        enrolledSubject: 'CS402: Distributed Systems',
-        subjectCode: 'CS-402',
-        quizzesAttempted: 1,
-        overallScore: 41,
-        performanceTier: 'Critical Gap',
-        weakestTopic: 'Two-Phase Commit (2PC) Blocking Coordinator Failures',
-        strongestTopic: 'RPC Basics',
+        enrolledSubject: 'CS301: Machine Learning',
+        subjectCode: 'CS-301',
+        quizzesAttempted: 2,
+        overallScore: 52,
+        performanceTier: 'Needs Attention',
+        weakestTopic: 'Vanishing Gradient Problem in Sigmoid Networks',
+        strongestTopic: 'Linear Regression Cost Formulation',
         primaryCognitiveGap: 'Conceptual Misunderstanding',
         lastActive: '2 days ago',
-        recommendedRemedial: 'Explain coordinator timeout states and 3-Phase Commit (3PC) non-blocking transitions.',
+        recommendedRemedial: 'Assign ReLU activation and He initialization visual comparison module.',
         topicScores: {
-          'Lamport Timestamps & Vector Clocks': 44,
-          'Consensus (Raft/Paxos)': 38,
-          'Distributed Transactions (2PC)': 35,
-          'CAP Theorem & Replication': 47
+          'Cost Functions & Gradients': 68,
+          'Bias-Variance & Regularization': 48,
+          'Logistic Regression': 52,
+          'Neural Net Backprop': 40
         }
       }
     ]
   }
 ];
-

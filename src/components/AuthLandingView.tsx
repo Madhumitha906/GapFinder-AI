@@ -23,6 +23,7 @@ import {
   setStoredUser,
   registerUser,
   authenticateUser,
+  getRegisteredUsers,
   RegisteredUser,
   PRESEEDED_USERS
 } from '@/lib/storage';
@@ -86,25 +87,42 @@ export function AuthLandingView({ onAuthenticated }: AuthLandingViewProps) {
     }
 
     setIsSubmitting(true);
-    const registered = authenticateUser(signInEmail);
+    const registered = authenticateUser(signInEmail, signInPassword);
 
     if (registered) {
       setStoredUser(registered);
       setIsSubmitting(false);
       onAuthenticated(registered);
     } else {
+      // Check if user exists but incorrect password
+      const users = getRegisteredUsers();
+      const existing = users.find(u => u.email.toLowerCase() === signInEmail.trim().toLowerCase());
+      if (existing && existing.password && signInPassword && existing.password !== signInPassword.trim()) {
+        setSignInError(`Invalid password for ${existing.name}. Please enter their designated demo password.`);
+        setIsSubmitting(false);
+        return;
+      }
+
       // Auto-register for fast access
       const isTeacher = signInEmail.toLowerCase().includes('teacher') || signInEmail.toLowerCase().includes('prof');
       const newUser = registerUser({
         name: signInEmail.split('@')[0],
         email: signInEmail.trim(),
         role: isTeacher ? 'teacher' : 'student',
-        targetGoal: 'University Coursework'
+        targetGoal: 'University Coursework',
+        password: signInPassword
       });
       setStoredUser(newUser);
       setIsSubmitting(false);
       onAuthenticated(newUser);
     }
+  };
+
+  // Pre-fill form helper
+  const handleFillDemo = (email: string, pass: string) => {
+    setSignInEmail(email);
+    setSignInPassword(pass);
+    setSignInError('');
   };
 
   // Handle Sign Up
@@ -227,49 +245,125 @@ export function AuthLandingView({ onAuthenticated }: AuthLandingViewProps) {
           {/* ========================================================== */}
           {activeTab === 'signin' && (
             <div className="space-y-4">
-              {/* One-Click Role Selector */}
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                  Select Role & Sign In
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {/* Teacher Button */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const teacher = PRESEEDED_USERS.find(u => u.role === 'teacher');
-                      if (teacher) handleQuickLogin(teacher);
-                    }}
-                    className="p-3 rounded-xl border border-emerald-200 hover:border-emerald-500 bg-emerald-50/60 hover:bg-emerald-50 text-left transition space-y-1 group hover:shadow-xs"
-                  >
-                    <div className="font-bold text-emerald-950 flex items-center gap-1.5 text-xs">
-                      <BookOpen className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition" />
-                      <span>Teacher / Educator</span>
-                    </div>
-                    <div className="text-[10px] text-emerald-800 font-medium truncate">Prof. Sarah Vance</div>
-                    <span className="inline-block text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-200/70 text-emerald-900">
-                      Class &amp; Subject Analytics &rarr;
-                    </span>
-                  </button>
+              {/* Demo Login Credentials for Evaluators */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                    Demo Login Credentials for Evaluators
+                  </label>
+                  <span className="text-[9px] font-semibold text-indigo-600 bg-indigo-50 px-1.5 py-0.2 rounded">
+                    1-Click or Manual
+                  </span>
+                </div>
 
-                  {/* Student Button */}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const student = PRESEEDED_USERS.find(u => u.role === 'student');
-                      if (student) handleQuickLogin(student);
-                    }}
-                    className="p-3 rounded-xl border border-sky-200 hover:border-sky-500 bg-sky-50/60 hover:bg-sky-50 text-left transition space-y-1 group hover:shadow-xs"
-                  >
-                    <div className="font-bold text-sky-950 flex items-center gap-1.5 text-xs">
-                      <GraduationCap className="w-4 h-4 text-sky-600 group-hover:scale-110 transition" />
-                      <span>Student Account</span>
+                <div className="space-y-2">
+                  {/* Professor: Dr. Sarah Williams */}
+                  <div className="p-3 rounded-xl border border-emerald-200 bg-emerald-50/70 hover:bg-emerald-50 transition space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <BookOpen className="w-4 h-4 text-emerald-600" />
+                        <span className="font-bold text-xs text-emerald-950">Dr. Sarah Williams</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-emerald-200 text-emerald-900">
+                          Professor
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const prof = PRESEEDED_USERS.find(u => u.email === 'prof.sarah@gapfinder.demo');
+                          if (prof) handleQuickLogin(prof);
+                        }}
+                        className="text-[10px] font-bold px-2 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-xs"
+                      >
+                        1-Click Login &rarr;
+                      </button>
                     </div>
-                    <div className="text-[10px] text-sky-800 font-medium truncate">Alex Rivera</div>
-                    <span className="inline-block text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-200/70 text-sky-900">
-                      Diagnostic &amp; Revision &rarr;
-                    </span>
-                  </button>
+                    <div className="text-[10px] text-emerald-800 flex flex-wrap items-center justify-between gap-1">
+                      <span><code>prof.sarah@gapfinder.demo</code> &bull; <code>Professor@123</code></span>
+                      <button
+                        type="button"
+                        onClick={() => handleFillDemo('prof.sarah@gapfinder.demo', 'Professor@123')}
+                        className="text-[9px] font-semibold text-emerald-700 hover:underline cursor-pointer"
+                      >
+                        Fill Form
+                      </button>
+                    </div>
+                    <div className="text-[9px] text-emerald-700 font-medium">
+                      Course Access: CS201 (OS), CS202 (DBMS), CS301 (ML)
+                    </div>
+                  </div>
+
+                  {/* Student 1: Alex Chen */}
+                  <div className="p-3 rounded-xl border border-sky-200 bg-sky-50/70 hover:bg-sky-50 transition space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <GraduationCap className="w-4 h-4 text-sky-600" />
+                        <span className="font-bold text-xs text-sky-950">Alex Chen</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-sky-200 text-sky-900">
+                          Student
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const alex = PRESEEDED_USERS.find(u => u.email === 'alex.chen@gapfinder.demo');
+                          if (alex) handleQuickLogin(alex);
+                        }}
+                        className="text-[10px] font-bold px-2 py-1 rounded-lg bg-sky-600 hover:bg-sky-700 text-white transition shadow-xs"
+                      >
+                        1-Click Login &rarr;
+                      </button>
+                    </div>
+                    <div className="text-[10px] text-sky-800 flex flex-wrap items-center justify-between gap-1">
+                      <span><code>alex.chen@gapfinder.demo</code> &bull; <code>Student@123</code></span>
+                      <button
+                        type="button"
+                        onClick={() => handleFillDemo('alex.chen@gapfinder.demo', 'Student@123')}
+                        className="text-[9px] font-semibold text-sky-700 hover:underline cursor-pointer"
+                      >
+                        Fill Form
+                      </button>
+                    </div>
+                    <div className="text-[9px] text-sky-700 font-medium">
+                      Course Access: CS201 (OS) and CS202 (DBMS)
+                    </div>
+                  </div>
+
+                  {/* Student 2: Priya Sharma */}
+                  <div className="p-3 rounded-xl border border-violet-200 bg-violet-50/70 hover:bg-violet-50 transition space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <GraduationCap className="w-4 h-4 text-violet-600" />
+                        <span className="font-bold text-xs text-violet-950">Priya Sharma</span>
+                        <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-violet-200 text-violet-900">
+                          Student
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const priya = PRESEEDED_USERS.find(u => u.email === 'priya.sharma@gapfinder.demo');
+                          if (priya) handleQuickLogin(priya);
+                        }}
+                        className="text-[10px] font-bold px-2 py-1 rounded-lg bg-violet-600 hover:bg-violet-700 text-white transition shadow-xs"
+                      >
+                        1-Click Login &rarr;
+                      </button>
+                    </div>
+                    <div className="text-[10px] text-violet-800 flex flex-wrap items-center justify-between gap-1">
+                      <span><code>priya.sharma@gapfinder.demo</code> &bull; <code>Student@123</code></span>
+                      <button
+                        type="button"
+                        onClick={() => handleFillDemo('priya.sharma@gapfinder.demo', 'Student@123')}
+                        className="text-[9px] font-semibold text-violet-700 hover:underline cursor-pointer"
+                      >
+                        Fill Form
+                      </button>
+                    </div>
+                    <div className="text-[9px] text-violet-700 font-medium">
+                      Course Access: CS201 (OS) and CS301 (ML Fundamentals)
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -288,7 +382,7 @@ export function AuthLandingView({ onAuthenticated }: AuthLandingViewProps) {
               <div className="relative flex items-center justify-center py-1">
                 <div className="border-t border-slate-200 w-full" />
                 <span className="bg-white px-2.5 text-[10px] uppercase font-bold text-slate-400 absolute">
-                  Or Credentials Sign In
+                  Or Type Credentials Below
                 </span>
               </div>
 

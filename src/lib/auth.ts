@@ -12,7 +12,46 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email) return null;
 
-        // Demo Judge Account & General Student Account
+        // 1. Professor: Dr. Sarah Williams
+        if (
+          credentials.email.toLowerCase() === 'prof.sarah@gapfinder.demo' &&
+          credentials.password === 'Professor@123'
+        ) {
+          return {
+            id: 'usr-prof-sarah',
+            name: 'Dr. Sarah Williams',
+            email: 'prof.sarah@gapfinder.demo',
+            role: 'teacher'
+          } as any;
+        }
+
+        // 2. Student: Alex Chen
+        if (
+          credentials.email.toLowerCase() === 'alex.chen@gapfinder.demo' &&
+          credentials.password === 'Student@123'
+        ) {
+          return {
+            id: 'usr-alex-chen',
+            name: 'Alex Chen',
+            email: 'alex.chen@gapfinder.demo',
+            role: 'student'
+          } as any;
+        }
+
+        // 3. Student: Priya Sharma
+        if (
+          credentials.email.toLowerCase() === 'priya.sharma@gapfinder.demo' &&
+          credentials.password === 'Student@123'
+        ) {
+          return {
+            id: 'usr-priya-sharma',
+            name: 'Priya Sharma',
+            email: 'priya.sharma@gapfinder.demo',
+            role: 'student'
+          } as any;
+        }
+
+        // 4. Demo Judge Account & General Student Account
         if (
           credentials.email === 'judge@gapfinder.ai' &&
           credentials.password === 'demo123456'
@@ -25,12 +64,13 @@ export const authOptions: NextAuthOptions = {
           } as any;
         }
 
-        // Allow any standard student demo login
+        // General fallback
+        const isProf = credentials.email.toLowerCase().includes('prof') || credentials.email.toLowerCase().includes('teacher');
         return {
           id: `usr-${Date.now()}`,
           name: credentials.email.split('@')[0],
           email: credentials.email,
-          role: 'student'
+          role: isProf ? 'teacher' : 'student'
         } as any;
       }
     })

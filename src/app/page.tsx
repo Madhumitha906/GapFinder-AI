@@ -41,10 +41,28 @@ export default function Home() {
   const [quizSelectedTopicId, setQuizSelectedTopicId] = useState<string | null>(null);
   const [assistantTopicPrompt, setAssistantTopicPrompt] = useState<string | null>(null);
 
-  const loadData = () => {
+  const loadData = (userOverride?: UserSession | null) => {
+    const user = userOverride !== undefined ? userOverride : currentUser;
     const loadedCourses = getStoredCourses();
-    const currentCourse = getActiveCourse();
-    setCourses(loadedCourses);
+
+    // Filter courses based on enrolledCourses for student accounts
+    let accessibleCourses = loadedCourses;
+    if (user && user.role === 'student' && user.enrolledCourses && user.enrolledCourses.length > 0) {
+      const filtered = loadedCourses.filter(c =>
+        user.enrolledCourses!.includes(c.id) ||
+        user.enrolledCourses!.includes(c.subjectCode)
+      );
+      if (filtered.length > 0) {
+        accessibleCourses = filtered;
+      }
+    }
+    setCourses(accessibleCourses);
+
+    let currentCourse = getActiveCourse();
+    if (!accessibleCourses.some(c => c.id === currentCourse.id)) {
+      currentCourse = accessibleCourses[0] || loadedCourses[0];
+      setActiveCourseId(currentCourse.id);
+    }
     setActiveCourse(currentCourse);
 
     let report = getStoredGapReport(currentCourse.id);
@@ -68,7 +86,7 @@ export default function Home() {
     // Check if user is already signed in
     const stored = getStoredUser();
     setCurrentUser(stored);
-    loadData();
+    loadData(stored);
   }, []);
 
   const handleSelectCourse = (courseId: string) => {
@@ -109,7 +127,7 @@ export default function Home() {
         onAuthenticated={user => {
           setCurrentUser(user);
           setPreviewStudentView(false);
-          loadData();
+          loadData(user);
         }}
       />
     );

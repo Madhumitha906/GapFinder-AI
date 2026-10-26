@@ -1,58 +1,93 @@
 # GapFinder AI 🧠⚡
-> **Grounded Knowledge Gap Diagnostic & Adaptive Personalized Revision Engine for Students & Teachers**
+> **Grounded Knowledge Gap Diagnostic & Adaptive Personalized Revision Engine for Students & Professors**
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![TailwindCSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
-[![RAG](https://img.shields.io/badge/RAG-Zero_Hallucination-emerald)](#rag-pipeline)
-[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL_%2F_Supabase_pgvector-336791?logo=postgresql)](#postgresql--supabase-pgvector-architecture)
-[![Demo](https://img.shields.io/badge/Demo_Access-Preloaded-amber)](#judge--evaluator-credentials)
+[![RAG](https://img.shields.io/badge/RAG-Zero_Hallucination-emerald)](#6-system-architecture--rag-pipeline-overview)
+[![Database](https://img.shields.io/badge/Database-PostgreSQL_%2F_Supabase_pgvector-336791?logo=postgresql)](#9-environment-variables--databasesupabase-setup)
+[![Demo](https://img.shields.io/badge/Demo_Access-Preloaded-amber)](#11-demo-login-credentials-for-evaluators)
 
 ---
 
-## 🎯 Executive Overview & Problem Statement
+## 1. Project Title & Overview
+
+**GapFinder AI** is an intelligent academic diagnostic platform that deconstructs a student’s syllabus, textbook chapters, lecture notes, and past examination papers to pinpoint precise knowledge gaps and construct a dynamic, time-budgeted revision plan.
+
+While conventional study tools passively wait for the student to ask questions, GapFinder AI proactively administers source-grounded diagnostic quizzes, categorizes topics into **Weak**, **Medium**, and **Strong** tiers, isolates specific cognitive failure modes, and equips professors with fine-grained topic mastery analytics across an entire class.
+
+---
+
+## 2. Problem Statement & Objectives
 
 ### The Problem
-Traditional AI study tools suffer from a fatal passive flaw: **they wait for the student to ask a question**. 
-However, **a student cannot ask about a gap they don’t know they have**. Before high-stakes exams, students spend over 60% of their revision time reviewing familiar topics where they feel comfortable, while critical syllabus gaps remain completely untouched until exam day. 
+Before exams, students spend over 60% of their revision time reviewing familiar topics where they feel comfortable, while critical syllabus gaps remain completely untouched until exam day. Traditional AI study applications act as generic "chatbots" that require students to already know what they do not understand. **A student cannot ask about a gap they don’t know they have.**
 
-Furthermore, teachers lack fine-grained, topic-level diagnostic visibility into where an entire class or individual students are struggling before the final exam.
+Furthermore, professors lack real-time visibility into which syllabus topics are causing systemic confusion before midterms and finals.
 
-### The Solution: GapFinder AI
-GapFinder AI reverses this paradigm. Instead of another generic "chat with your PDF" tool, GapFinder AI:
-1. **First-Screen Streamlined Authentication**: Centered Sign In and Sign Up portal with role-based routing for **Students** and **Teachers**.
-2. **Comprehensive Teacher & Educator Portal**: 
-   * Identifies which subject the teacher teaches (with dynamic subject switching & custom subject creation).
-   * Displays real-time counts of signed-in students for that subject.
-   * Delivers cohort-wide overall performance diagnostics (class average, tier distributions, topic mastery bars, class blindspots).
-   * Drills down into individual student performances with cognitive gap diagnoses and 1-click remediation.
-3. **Student Diagnostic & Revision Workflow**:
-   * Parses the student's entire academic corpus (syllabus weightages, textbook chapters, lecture notes, and past question papers).
-   * Constructs an interactive **Topic Knowledge Map** with Bloom's taxonomy cognitive levels.
-   * Administers **Diagnostic Quizzes** grounded strictly in retrieved material with verifiable source citations.
-   * Generates an evidence-based **Gap Report** categorizing topics into **Weak (<50%)**, **Medium (50–75%)**, and **Strong (>75%)** with specific cognitive error classifications.
-   * Synthesizes an adaptive **Time-Budgeted Revision Plan** prioritized by exam marks and gap severity.
-   * Provides an **Explain-This-Topic RAG Assistant** with strict citation grounding and zero hallucinations.
-4. **PostgreSQL / Supabase pgvector Database Studio**:
-   * Complete relational and vector schema with vector embeddings, pgvector cosine distance indices, and an interactive query and search tester.
+### Objectives
+1. **Automated Topic Mapping**: Extract hierarchical knowledge trees with Bloom’s taxonomy levels and syllabus weightages.
+2. **Grounded Assessment**: Generate diagnostic questions tied strictly to uploaded course passages with verifiable citations.
+3. **Evidence-Based Gap Analysis**: Classify topics by comprehension score and detect cognitive root causes (*Recall Failure*, *Conceptual Misunderstanding*, *Application / Formula Slip*).
+4. **Time-Budgeted Adaptive Revision**: Formulate daily study schedules tailored to available study days and hours.
+5. **Class-Level Professor Analytics**: Provide educators with real-time class averages, performance tier distributions, and curriculum blindspot alerts.
 
 ---
 
-## 🏆 Judge & Evaluator Credentials
+## 3. Key Features
 
-GapFinder AI comes preloaded with complete university datasets for instantaneous evaluation:
-
-| Role | Email | Password | Preloaded Context / Access |
-|---|---|---|---|
-| **Teacher / Educator** | `teacher@gapfinder.ai` | `demo123456` | **Prof. Sarah Vance**: CS301 (OS), CS204 (DBMS), CS402 (Distributed Systems), 28 active students, cohort analytics & individual gap drilldowns |
-| **Student** | `student@gapfinder.ai` | `demo123456` | **Alex Rivera**: Preloaded CS301 syllabus, textbook notes, diagnostic quiz attempts, weak topic reports, and revision plan |
-| **Hackathon Judge** | `judge@gapfinder.ai` | `demo123456` | Evaluator dashboard with direct 1-click access to both Teacher and Student perspectives |
-
-> **Tip**: On the first screen, you can also click the quick 1-click demo buttons under the login form to authenticate immediately without typing credentials!
+- **Centered Authentication Gateway**: Clean, focused first-screen sign-in card with 1-click evaluator logins and role switching.
+- **Dedicated Professor & Educator Portal**:
+  - *Which subject the teacher teaches:* Dynamic course switcher for CS201 (OS), CS202 (DBMS), and CS301 (ML).
+  - *How many students are signed in:* Real-time active signed-in counter (e.g., 28 / 30 enrolled — 93.3% participation).
+  - *Total students' overall performance:* Class average, cohort performance tier breakdown, and curriculum topic mastery progress bars.
+  - *Individual student performances:* Detailed student roster, weakest/strongest topic detection, cognitive error classifications, and 1-click gap report drilldown inspector.
+- **Student Diagnostic & Revision Workspace**:
+  - *Topic Map:* Visual curriculum hierarchy with Bloom cognitive tags.
+  - *Diagnostic Quiz Engine:* Source-grounded questions with citations, distractor explanations, and metacognitive confidence markers.
+  - *Gap Report:* Instant diagnosis of weak, medium, and strong topics with root causes.
+  - *Revision Planner:* Dynamic Knapsack-optimized daily schedules (24h Cram, 3-Day Sprint, 7-Day Thorough, 14-Day Mastery).
+  - *Explain-This-Topic RAG Assistant:* Conversational tutor quoting exact textbook chunks with zero hallucination.
+  - *Progress Dashboard:* Attempt history and score trajectory over time.
+- **Interactive Database Studio**: Built-in inspector for PostgreSQL relational tables and live `pgvector` cosine similarity vector searches.
 
 ---
 
-## 🏗️ Technical Architecture & System Design
+## 4. Technology Stack
+
+| Layer | Technologies Used | Verification in Codebase |
+|---|---|---|
+| **Frontend Framework** | Next.js 14.2 (App Router), React 18 | [`src/app/page.tsx`](file:///d:/GapFinder%20AI/src/app/page.tsx), [`src/app/layout.tsx`](file:///d:/GapFinder%20AI/src/app/layout.tsx) |
+| **Language & Typings** | TypeScript 5.6 | [`src/types/index.ts`](file:///d:/GapFinder%20AI/src/types/index.ts) |
+| **Styling & UI** | Tailwind CSS 3.4, Lucide React, Canvas Confetti | [`tailwind.config.ts`](file:///d:/GapFinder%20AI/tailwind.config.ts), [`src/app/globals.css`](file:///d:/GapFinder%20AI/src/app/globals.css) |
+| **Authentication** | NextAuth.js & Client Auth Provider | [`src/lib/auth.ts`](file:///d:/GapFinder%20AI/src/lib/auth.ts), [`src/components/AuthLandingView.tsx`](file:///d:/GapFinder%20AI/src/components/AuthLandingView.tsx) |
+| **Database & Vector Store** | PostgreSQL, Supabase, `pgvector` | [`supabase/schema.sql`](file:///d:/GapFinder%20AI/supabase/schema.sql), [`src/lib/supabase.ts`](file:///d:/GapFinder%20AI/src/lib/supabase.ts) |
+| **RAG & Search Engine** | BM25 + Cosine Inverted Term Frequency Index | [`src/lib/rag-engine.ts`](file:///d:/GapFinder%20AI/src/lib/rag-engine.ts) |
+| **AI LLM Layer** | Google Gemini API (Optional live enhancement) | [`src/app/api/ai/chat/route.ts`](file:///d:/GapFinder%20AI/src/app/api/ai/chat/route.ts) |
+
+---
+
+## 5. User Workflows
+
+### Student Workflow
+1. **Login & Course Selection**: Log in using your student account. Your view automatically filters to your enrolled subjects (e.g., Alex Chen sees CS201 and CS202; Priya Sharma sees CS201 and CS301).
+2. **Review Topic Map**: Inspect curriculum units, exam weightages, and prerequisites.
+3. **Take Diagnostic Quiz**: Complete grounded multiple-choice questions while recording confidence levels (*Confident*, *Somewhat Confident*, *Guessing*).
+4. **Analyze Gap Report**: View topics classified as Weak (<50%), Medium (50–75%), or Strong (>75%) with clear cognitive diagnoses.
+5. **Execute Revision Plan**: Follow an adaptive daily schedule with interactive checklists and source citations.
+6. **Consult Explain Assistant**: Ask concept questions answered strictly using uploaded textbook passages.
+
+### Professor Workflow
+1. **Login to Educator Portal**: Sign in as Dr. Sarah Williams (`prof.sarah@gapfinder.demo`).
+2. **Select Active Subject**: Switch between taught courses (*CS201 Operating Systems*, *CS202 Database Systems*, *CS301 Machine Learning*).
+3. **Monitor Class Participation**: View live signed-in counters (e.g., 28 signed in out of 30 enrolled).
+4. **Inspect Cohort Analytics**: Review overall class diagnostic average (68%), tier distributions (High Distinction, Proficient, Needs Attention, Critical Gaps), and AI blindspot alerts.
+5. **Drill Down into Students**: Filter students by score tier, inspect individual gap reports, and send targeted remedial revision nudges.
+6. **Educator Student View Preview**: Click "Student View" in the header to experience exactly what students see.
+
+---
+
+## 6. System Architecture & RAG Pipeline Overview
 
 ```
 +---------------------------------------------------------------------------------------------------------+
@@ -60,239 +95,252 @@ GapFinder AI comes preloaded with complete university datasets for instantaneous
 +---------------------------------------------------------------------------------------------------------+
 |                                                                                                         |
 |  [First Screen: Centered Authentication Gateway]                                                        |
-|   ├── Sign In / Sign Up Card (Centered, distraction-free UI)                                           |
-|   └── Role-Based Dispatcher ──┬───────────────────────────────────────────┐                             |
-|                               │                                           │                             |
-|                               ▼ (Role = Teacher)                          ▼ (Role = Student / Judge)    |
-|  [Teacher & Educator Dashboard]                           [Student Diagnostic Learning Engine]          |
-|   ├── Subject Selection & Management                      ├── Material Upload (Syllabus, Notes, Papers) |
-|   ├── Signed-In Student Counter (e.g. 28/30 active)       ├── Topic Map & Bloom Taxonomy Hierarchy     |
-|   ├── Cohort Overall Performance (Avg, Tiers, Mastery)    ├── Grounded Diagnostic Quiz with Citations   |
-|   ├── Class-Wide Blindspot Detection                      ├── Gap Report (Weak / Medium / Strong)       |
-|   └── Individual Student Roster & Drilldown Drawer        ├── Personalized Time-Budgeted Revision Plan  |
-|                                                           ├── Explain-This-Topic RAG Assistant          |
-|                                                           └── Progress Dashboard & Historical Trends    |
+|   └── Role Dispatcher ──┬────────────────────────────────────────────────────────┐                      |
+|                         ▼ (Role = Professor)                                     ▼ (Role = Student)     |
+|  [Professor Portal (TeacherDashboardView)]              [Student Engine (TopicMap, Quiz, GapReport)]    |
+|   ├── Subject Selection & Custom Course Creation         ├── Grounded Diagnostic Quiz with Citations    |
+|   ├── Signed-In Student Counter (28/30 active)           ├── Cognitive Gap Report (Weak/Medium/Strong)  |
+|   ├── Class Overall Average & Tiers                      ├── Time-Budgeted Revision Schedule            |
+|   └── Individual Student Roster & Drilldown Drawer       └── Explain-This-Topic RAG Chatbot             |
 |                                                                                                         |
 |                                         │                                                               |
 |                                         ▼                                                               |
-|  [Hybrid RAG & Vector Storage Engine (Next.js API + PostgreSQL / Supabase pgvector)]                    |
-|   ├── Semantic Boundary Chunking (~650 chars, 100 char overlap)                                         |
-|   ├── 1536-dimensional Vector Embeddings & Inverted Keyword Index (BM25 + Cosine)                       |
-|   ├── Strict Citation Attribution & Source Grounding Guardrails                                         |
-|   └── Full Relational Schema: Courses, Topics, Documents, Quizzes, Attempts, Reports, Plans             |
+|  [Hybrid RAG & Vector Engine (Next.js API + PostgreSQL / Supabase pgvector)]                             |
+|   ├── Semantic Boundary Partitioning (~650 chars, 100 char overlap)                                     |
+|   ├── 1536-dimensional Vector Embeddings & Inverted BM25 Search Index                                   |
+|   └── Verifiable Citation Attributions (docTitle, section, excerpt)                                     |
 +---------------------------------------------------------------------------------------------------------+
 ```
 
----
-
-## 🧑‍🏫 Teacher Portal Features
-
-When logging in as a Teacher, GapFinder AI answers the 4 key pedagogical questions:
-
-1. **Which subject does the teacher teach?**
-   - Active subject selector for university courses (*CS301: Operating Systems & Virtual Memory Architecture*, *CS204: Database Systems & ACID Transactions*, *CS402: Distributed Systems & Consensus Algorithms*).
-   - Built-in `+ Add New Subject` modal to register custom subjects, semesters, and syllabi.
-2. **How many students are signed in for that subject?**
-   - Live counter displaying enrolled students vs. active signed-in students (e.g., **28 signed in / 30 enrolled — 93.3% active engagement**).
-3. **What is the total students' overall performance?**
-   - Class-wide diagnostic average score (e.g. **68% B- Mastery**).
-   - Distribution tiers: *High Distinction (90%+)*, *Proficient (70–89%)*, *Needs Attention (50–69%)*, and *Critical Gaps (<50%)*.
-   - Topic-by-topic class mastery bars across the entire syllabus.
-   - **AI Class Blindspot Alert**: Flags topics where over 60% of students failed (e.g. *FIFO Page Replacement & Belady's Anomaly at 36%*).
-4. **What are their individual performances?**
-   - Interactive roster table with real student metrics: quizzes attempted, mastery scores, weakest topic gap, strongest topic, and cognitive gap classification (*Conceptual*, *Application*, *Formula Slip*, or *Terminology*).
-   - **1-Click "Inspect Gap Report" Drawer**: View each student's granular topic scores, misconception notes, and targeted remedial plan.
-   - **Send Remedial Nudge**: Triggers targeted study modules for struggling students.
+### RAG Pipeline Specifications
+- **Chunking**: Partitions documents on logical section headers (`#`, `Chapter`, `Section`, `Problem`) with **650 characters** target size and **100 characters** overlap.
+- **Retrieval**: Hybrid scoring integrating BM25 term weighting, inverse document frequency (IDF), and cosine distance.
+- **Zero Hallucination**: Every generated question and explanation cites its specific document, chapter, and text passage.
 
 ---
 
-## 🔍 The RAG Pipeline (Chunking, Embedding, Retrieval)
-
-### 1. Chunking Strategy
-- Documents are split into semantic chunks adhering to logical headers (`#`, `Chapter`, `Unit`, `Section`, `Problem`).
-- Target chunk size: **650 characters** with an overlap of **100 characters** to ensure uninterrupted contextual boundaries across formulas and definitions.
-- Metadata attached to every chunk: `docId`, `docTitle`, `docType`, `section`, `tokenCount`, and extracted domain `keywords`.
-
-### 2. Retrieval & Semantic Similarity
-- Hybrid semantic search combining **BM25 term scoring**, **inverse document frequency (IDF)**, and **vector cosine similarity**.
-- Automatic intent boosting: queries with "exam" or "solve" prioritize *past question paper chunks*; queries with "weightage" prioritize *syllabus chunks*.
-- Each retrieved chunk is scored and ranked, filtering out any hits below the relevance threshold ($\ge 0.05$).
-
-### 3. Citation Provenance & Hallucination Prevention
-- Every quiz question and explanation generated displays its source metadata:
-  ```json
-  {
-    "docTitle": "Operating Systems Principles (8th Ed) - Silberschatz & Galvin",
-    "section": "Chapter 5.3: CPU Scheduling Algorithms",
-    "snippet": "If the time quantum is extremely small, RR is called processor sharing, and results in excessive context-switch overhead..."
-  }
-  ```
-- If a user asks the Explain Assistant a question outside their course material, the system explicitly warns: *"I could not find exact passages in your uploaded syllabus or notes. To maintain strict RAG grounding, please upload relevant material."*
-
----
-
-## 🗄️ PostgreSQL / Supabase pgvector Architecture
-
-GapFinder AI includes an interactive **Database Studio** view allowing judges to inspect the relational schema, view table records, and execute live vector searches:
-
-```sql
--- Enable pgvector extension
-CREATE EXTENSION IF NOT EXISTS vector;
-
--- Document chunks table with 1536-dimensional embeddings
-CREATE TABLE document_chunks (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    document_id UUID REFERENCES documents(id) ON DELETE CASCADE,
-    course_id VARCHAR(50) NOT NULL,
-    chunk_index INT NOT NULL,
-    section_title VARCHAR(255),
-    content TEXT NOT NULL,
-    token_count INT,
-    keywords TEXT[],
-    embedding vector(1536),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Fast approximate nearest neighbor search index using IVFFlat
-CREATE INDEX ON document_chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
-
--- Vector Cosine Similarity Search Function
-CREATE OR REPLACE FUNCTION match_document_chunks (
-    query_embedding vector(1536),
-    match_threshold FLOAT,
-    match_count INT,
-    filter_course_id VARCHAR(50) DEFAULT NULL
-)
-RETURNS TABLE (
-    id UUID,
-    document_id UUID,
-    section_title VARCHAR(255),
-    content TEXT,
-    similarity FLOAT
-)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    RETURN QUERY
-    SELECT
-        dc.id,
-        dc.document_id,
-        dc.section_title,
-        dc.content,
-        1 - (dc.embedding <=> query_embedding) AS similarity
-    FROM document_chunks dc
-    WHERE (filter_course_id IS NULL OR dc.course_id = filter_course_id)
-      AND 1 - (dc.embedding <=> query_embedding) > match_threshold
-    ORDER BY dc.embedding <=> query_embedding
-    LIMIT match_count;
-END;
-$$;
-```
-
----
-
-## 💡 Separation of Concerns in AI
-
-| Module | Retrieval Component | Generative / Diagnostic Component | Separation & Safety Mechanism |
-|---|---|---|---|
-| **Topic Map** | Extracts units & chapters from syllabus | Categorizes Bloom levels & weightages | Strict regex & semantic heading parsing |
-| **Diagnostic Quiz** | Retrieves primary textbook chunk | Formulates distractors representing real misconceptions | Option correctness verified against chunk ground truth |
-| **Answer Evaluation** | Retrieves model solution & citation | Explains *why* student answer was wrong | Rule-checked against target option index and excerpt |
-| **Gap Report** | Maps test attempts to syllabus nodes | Assigns Weak/Medium/Strong ratings + root causes | Deterministic diagnostic matrix weighted by confidence |
-| **Revision Plan** | Ranks weak nodes by exam marks | Allocates daily study minutes & study modes | Constraint satisfaction knapsack algorithm |
-| **Explain Assistant** | BM25/Cosine retrieval over all docs | Summarizes concept & provides analogies | Source citations rendered in interactive drawer |
-
----
-
-## 🚀 Quickstart & Setup Instructions
-
-### Prerequisites
-- Node.js v18+, v20+, or v22+
-- npm v10+
-- Git
-
-### 1. Clone & Install
-```bash
-git clone https://github.com/Madhumitha906/GapFinder-AI.git
-cd GapFinder-AI
-npm install
-```
-
-### 2. Run Locally
-```bash
-npm run dev
-```
-Open **[http://localhost:3000](http://localhost:3000)** in your browser.
-
-### 3. Production Build
-```bash
-npm run build
-npm run start
-```
-
-### 4. (Optional) Configure Gemini API Key
-GapFinder AI includes a **zero-dependency deterministic RAG engine** that runs completely offline with instant preloaded data! If you wish to enable live Google Gemini generative calls, create `.env.local`:
-```env
-NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
-```
-Or click the **"AI API Key (Optional)"** button in the top navigation bar inside the app.
-
----
-
-## 📁 Repository Structure
+## 7. Project Directory Structure
 
 ```
 GapFinder AI/
+├── docs/
+│   ├── ARCHITECTURE.md          # Complete system design & Mermaid component diagram
+│   ├── SETUP.md                 # Detailed installation & configuration instructions
+│   ├── SECURITY.md              # Secrets management, privacy, & demo account policies
+│   └── CONTRIBUTING.md          # Contribution guidelines & coding conventions
 ├── src/
 │   ├── app/
 │   │   ├── api/
-│   │   │   ├── rag/search/route.ts        # Semantic chunk search endpoint
-│   │   │   └── diagnose/route.ts          # Gap report & revision plan endpoint
-│   │   ├── globals.css                    # Tailwind CSS styles & animations
-│   │   ├── layout.tsx                     # Root HTML & metadata wrapper
-│   │   └── page.tsx                       # Main application & role-based view switcher
+│   │   │   ├── ai/chat/route.ts       # Grounded RAG chat endpoint
+│   │   │   ├── ai/question/route.ts   # Diagnostic question generator
+│   │   │   ├── auth/[...nextauth]/route.ts # NextAuth authentication handler
+│   │   │   ├── db/status/route.ts     # Supabase / PostgreSQL health check
+│   │   │   ├── diagnose/route.ts      # Gap report & revision plan engine
+│   │   │   └── rag/search/route.ts    # Hybrid chunk search endpoint
+│   │   ├── globals.css          # Tailwind CSS styles and custom badges
+│   │   ├── layout.tsx           # Root HTML layout and metadata
+│   │   └── page.tsx             # Main view router & role-based switchboard
 │   ├── components/
-│   │   ├── AuthLandingView.tsx            # Centered first screen Sign In / Sign Up
-│   │   ├── TeacherDashboardView.tsx       # Teacher subjects & student performance portal
-│   │   ├── Navbar.tsx                     # Navigation header, user profile, role switcher
-│   │   ├── TopicMapView.tsx               # Topic hierarchy & syllabus weightage tree
-│   │   ├── DiagnosticQuizView.tsx         # Source-grounded diagnostic quiz with citations
-│   │   ├── GapReportView.tsx              # Topic gap diagnostic matrix & root causes
-│   │   ├── RevisionPlanView.tsx           # Time-budgeted adaptive revision schedule
-│   │   ├── ExplainAssistantView.tsx       # RAG grounded conversational tutor
-│   │   ├── MaterialUploadView.tsx         # Syllabus/textbook/notes upload & chunking
-│   │   ├── ProgressDashboardView.tsx      # Student diagnostic mastery trajectories
-│   │   ├── DatabaseStudioView.tsx         # Supabase / PostgreSQL pgvector Studio
-│   │   └── ArchitectureView.tsx           # Interactive architecture & RAG documentation
+│   │   ├── ArchitectureView.tsx       # Interactive architecture & RAG documentation
+│   │   ├── AuthLandingView.tsx        # Centered first screen Sign In / Sign Up
+│   │   ├── DatabaseStudioView.tsx     # Supabase / PostgreSQL pgvector Studio
+│   │   ├── DiagnosticQuizView.tsx     # Source-grounded diagnostic quiz
+│   │   ├── ExplainAssistantView.tsx   # Grounded RAG conversational tutor
+│   │   ├── GapReportView.tsx          # Weak/Medium/Strong diagnostic matrix
+│   │   ├── MaterialUploadView.tsx     # Syllabus/textbook/notes upload & chunker
+│   │   ├── Navbar.tsx                 # Navigation header with enrolled course selector
+│   │   ├── ProgressDashboardView.tsx  # Historical mastery trajectory
+│   │   ├── RevisionPlanView.tsx       # Time-budgeted interactive study schedule
+│   │   ├── TeacherDashboardView.tsx   # Professor subject & student analytics portal
+│   │   └── TopicMapView.tsx           # Knowledge graph & syllabus weightage tree
 │   ├── lib/
-│   │   ├── rag-engine.ts                  # Hybrid search, chunking, gap analysis, knapsack planner
-│   │   ├── sample-data.ts                 # Preloaded CS301 syllabus, notes, teacher cohort data
-│   │   └── storage.ts                     # Local storage persistence & state sync
+│   │   ├── auth.ts              # NextAuth configuration and credentials provider
+│   │   ├── rag-engine.ts        # Chunking, search, gap diagnosis, & knapsack planner
+│   │   ├── sample-data.ts       # Preloaded university courses, chunks, & teacher roster
+│   │   ├── storage.ts           # Client persistence layer & preseeded accounts
+│   │   └── supabase.ts          # Supabase client initializer
 │   └── types/
-│       └── index.ts                       # Strict TypeScript interfaces & data contracts
-├── package.json                           # Dependencies & scripts
-├── tsconfig.json                          # TypeScript configuration
-├── tailwind.config.ts                     # Tailwind theme and colors
-└── README.md                              # Comprehensive project documentation
+│       └── index.ts             # Strict TypeScript data contracts & interfaces
+├── supabase/
+│   └── schema.sql               # PostgreSQL schema & pgvector search function
+├── .env.example                 # Safe environment variable template
+├── .gitignore                   # Comprehensive secret and build exclusion rules
+├── package.json                 # Project dependencies & build scripts
+├── tailwind.config.ts           # Tailwind theme configuration
+├── tsconfig.json                # TypeScript configuration
+└── README.md                    # Project documentation
 ```
 
 ---
 
-## 🔮 Limitations & Future Roadmap
+## 8. Installation & Prerequisites
 
-### Current Limitations
-1. Complex mathematical formulas formatted in specialized LaTeX fonts require raw text expressions for semantic indexing.
-2. Handwritten scanned PDFs require an OCR preprocessing step prior to chunking.
-3. Client-side browser storage is utilized for instant zero-setup judge evaluation; production multi-tenant deployments connect to Supabase/PostgreSQL with `pgvector`.
+### Prerequisites
+- **Node.js**: `v18.17.0+` or `v20.x` or `v22.x`
+- **npm**: `v10+`
+- **Git**: `v2.30+`
 
-### Future Scalability
-- **LMS Integrations**: Two-way gradebook synchronization with Canvas, Blackboard, and Google Classroom.
-- **Spaced Repetition Scheduler**: Push notifications right before memory decay using the SuperMemo SM-2 algorithm.
-- **Multi-Subject & Multi-Language Support**: Cross-lingual embeddings for state and national examinations.
-- **Automated Remedial Content Generator**: Auto-compilation of personalized review booklets for students facing critical gaps.
+### Installation Steps
+```bash
+# 1. Clone the repository
+git clone https://github.com/Madhumitha906/GapFinder-AI.git
+cd GapFinder-AI
+
+# 2. Install dependencies
+npm install
+
+# 3. Start development server
+npm run dev
+```
+
+Open **[http://localhost:3000](http://localhost:3000)** in your browser.
 
 ---
 
-## 📜 License & Acknowledgments
-MIT License &copy; 2026 **GapFinder AI Team**. Developed for the Advanced AI Hackathon.
-GitHub Repository: [https://github.com/Madhumitha906/GapFinder-AI.git](https://github.com/Madhumitha906/GapFinder-AI.git)
+## 9. Environment Variables & Database/Supabase Setup
+
+GapFinder AI runs **completely offline out-of-the-box** using preloaded academic data and client storage.
+
+To connect live Supabase / PostgreSQL and Google Gemini AI, copy `.env.example` to `.env.local`:
+```bash
+cp .env.example .env.local
+```
+
+### PostgreSQL / Supabase Setup
+1. Create a Supabase project at [Supabase.com](https://supabase.com).
+2. Execute the SQL script in [`supabase/schema.sql`](file:///d:/GapFinder%20AI/supabase/schema.sql) using the Supabase SQL Editor.
+3. Configure your keys in `.env.local`:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   NEXT_PUBLIC_GEMINI_API_KEY=AIzaSy...
+   ```
+
+---
+
+## 10. Commands to Run, Test, and Build
+
+| Command | Action |
+|---|---|
+| `npm run dev` | Start development server on `http://localhost:3000` |
+| `npm run build` | Compile TypeScript and generate production build |
+| `npm run start` | Start production server on `http://localhost:3000` |
+| `npm run lint` | Run ESLint static code quality checks |
+
+---
+
+## 11. Demo Login Credentials for Evaluators
+
+The following preconfigured demo accounts are provided for project evaluation:
+
+| Role | Name | Email | Password | Course Access |
+|---|---|---|---|---|
+| **Professor** | Dr. Sarah Williams | `prof.sarah@gapfinder.demo` | `Professor@123` | **CS201** Operating Systems, **CS202** Database Management Systems, **CS301** Machine Learning Fundamentals |
+| **Student** | Alex Chen | `alex.chen@gapfinder.demo` | `Student@123` | **CS201** Operating Systems and **CS202** Database Management Systems |
+| **Student** | Priya Sharma | `priya.sharma@gapfinder.demo` | `Student@123` | **CS201** Operating Systems and **CS301** Machine Learning Fundamentals |
+
+> [!NOTE]
+> **Hackathon Judge Quick Access**: You may also click the **"1-Click Hackathon Judge Access"** button on the first screen to evaluate all courses simultaneously with `judge@gapfinder.ai`.
+
+### Step-by-Step Evaluator Instructions
+1. **Start the application** using `npm run dev` or `npm run start`.
+2. **Open the local application URL**: [http://localhost:3000](http://localhost:3000).
+3. **Choose Student or Professor login**:
+   - Click the **"1-Click Login &rarr;"** button on any of the evaluator cards for instant access, OR
+   - Click **"Fill Form"** to test manual credential verification with the email and password above.
+4. **Explore the respective dashboard**:
+   - **As Professor (Dr. Sarah Williams)**: Inspect taught subjects, view the 28 signed-in students counter, check class averages and distribution tiers, view topic mastery bars, drill down into individual student gap reports, and test the "Student View" preview.
+   - **As Student (Alex Chen or Priya Sharma)**: Inspect the Topic Map, take a Diagnostic Quiz with source citations, view the categorized Gap Report, review your personalized Revision Plan, and query the Explain Assistant.
+
+> [!WARNING]
+> **DEMO USE ONLY**: These accounts contain synthetic demonstration data for evaluation purposes. Do not enter personal or confidential information. Never use these demo passwords on real external accounts.
+
+---
+
+## 12. Screenshots & Visual Interface
+
+```
++-----------------------------------------------------------------------------------+
+|  [Screenshot Placeholder: Centered Authentication Gateway]                        |
+|  Clean, distraction-free first page with 1-click evaluator demo cards             |
+|  (Dr. Sarah Williams, Alex Chen, Priya Sharma, and Hackathon Judge Access).        |
++-----------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+|  [Screenshot Placeholder: Professor & Educator Dashboard]                         |
+|  Subject switcher (CS201, CS202, CS301), 28/30 active students counter,           |
+|  class mastery bars, cohort distribution tiers, and student drilldown table.      |
++-----------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+|  [Screenshot Placeholder: Grounded Diagnostic Quiz & Citations]                   |
+|  Source-grounded questions displaying textbook chapter citations,                  |
+|  misconception explanations, and confidence markers (Confident / Guessing).       |
++-----------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------+
+|  [Screenshot Placeholder: Topic Gap Report & Adaptive Revision Planner]           |
+|  Weak (<50%), Medium (50-75%), and Strong (>75%) classification with              |
+|  cognitive root causes and Knapsack-budgeted daily revision schedule.            |
++-----------------------------------------------------------------------------------+
+```
+
+---
+
+## 13. Testing Instructions
+
+1. **Verify Professor Portal**:
+   - Log in as Dr. Sarah Williams (`prof.sarah@gapfinder.demo` / `Professor@123`).
+   - Switch between **CS201**, **CS202**, and **CS301** using the subject cards.
+   - Verify the student counter shows **28 active signed in / 30 enrolled**.
+   - In the student roster, click **"Inspect"** on Alex Chen or Priya Sharma to open the individual diagnostic drawer.
+2. **Verify Student Course Enrollment Filtering**:
+   - Sign out and log in as **Alex Chen** (`alex.chen@gapfinder.demo` / `Student@123`).
+   - Check the course dropdown in the header: verify only **CS201** and **CS202** are accessible.
+   - Sign out and log in as **Priya Sharma** (`priya.sharma@gapfinder.demo` / `Student@123`).
+   - Verify only **CS201** and **CS301** are accessible.
+3. **Verify Diagnostic Quiz & Gap Report**:
+   - Start a quiz, select answers, choose a confidence level, and submit.
+   - Confirm that the Gap Report immediately recalculates with updated Weak/Medium/Strong badges.
+4. **Verify Database Studio**:
+   - Click the **"PostgreSQL: pgvector Connected"** badge in the header.
+   - Inspect table schemas and run a live vector similarity query test.
+
+---
+
+## 14. Security & Privacy Notes
+
+- **Secrets Isolation**: No API keys or passwords are committed to Git. Local overrides use `.env.local`, which is blocked by `.gitignore`.
+- **RBAC**: NextAuth JWT tokens enforce role authorization between professors, students, and evaluators.
+- **RAG Grounding**: Responses are bounded to retrieved academic text chunks with exact citations.
+- Detailed specifications are available in [`docs/SECURITY.md`](file:///d:/GapFinder%20AI/docs/SECURITY.md).
+
+---
+
+## 15. Known Limitations & Future Enhancements
+
+### Known Limitations
+1. Highly specialized mathematical formulas formatted in complex LaTeX require standard textual representations for optimal semantic indexing.
+2. Scanned image-only PDFs require an OCR preprocessing pipeline prior to chunking.
+3. Client browser persistence is utilized for zero-configuration evaluation; multi-tenant enterprise deployments link directly to Supabase PostgreSQL.
+
+### Future Enhancements
+- **Automated Spaced Repetition (SuperMemo SM-2)**: Scheduled push notifications right before memory decay occurs.
+- **LMS Gradebook Integration**: Two-way gradebook synchronization with Canvas, Blackboard, and Google Classroom via LTI 1.3.
+- **Cross-Lingual Embeddings**: Support for regional languages in national exam preparation.
+
+---
+
+## 16. Contribution Guidelines
+
+Contributions are welcome! Please read [`docs/CONTRIBUTING.md`](file:///d:/GapFinder%20AI/docs/CONTRIBUTING.md) for coding standards, branching conventions, and pull request procedures.
+
+---
+
+## 17. License Information
+
+This project is licensed under the **MIT License**.  
+&copy; 2026 **GapFinder AI Team**. Developed for academic evaluation, project demonstration, and recruitment review.
+
+GitHub Repository: **[https://github.com/Madhumitha906/GapFinder-AI.git](https://github.com/Madhumitha906/GapFinder-AI.git)**

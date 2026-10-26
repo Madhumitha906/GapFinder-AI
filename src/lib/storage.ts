@@ -10,6 +10,7 @@ import {
 } from '@/types';
 import {
   INITIAL_PRELOADED_COURSE,
+  PRELOADED_COURSES,
   SAMPLE_QUIZ_QUESTIONS
 } from './sample-data';
 import {
@@ -26,9 +27,9 @@ export interface RegisteredUser extends UserSession {
 
 const STORAGE_KEYS = {
   CURRENT_USER: 'gapfinder_user_v1',
-  REGISTERED_USERS: 'gapfinder_registered_users_v1',
-  COURSES: 'gapfinder_courses_v1',
-  ACTIVE_COURSE_ID: 'gapfinder_active_course_v1',
+  REGISTERED_USERS: 'gapfinder_registered_users_v2',
+  COURSES: 'gapfinder_courses_v2',
+  ACTIVE_COURSE_ID: 'gapfinder_active_course_v2',
   QUIZ_ATTEMPTS: 'gapfinder_quiz_attempts_v1',
   GAP_REPORTS: 'gapfinder_gap_reports_v1',
   REVISION_PLANS: 'gapfinder_revision_plans_v1',
@@ -37,43 +38,90 @@ const STORAGE_KEYS = {
 };
 
 export const DEMO_USER: UserSession = {
-  id: 'usr-demo-judge',
-  name: 'Judge / Evaluator',
-  email: 'judge@gapfinder.ai',
-  role: 'evaluator',
-  isDemoUser: true
+  id: 'usr-prof-sarah',
+  name: 'Dr. Sarah Williams',
+  email: 'prof.sarah@gapfinder.demo',
+  role: 'teacher',
+  isDemoUser: true,
+  enrolledCourses: ['course-cs201', 'course-cs202', 'course-cs301']
 };
 
 export const PRESEEDED_USERS: RegisteredUser[] = [
+  // 1. Professor: Dr. Sarah Williams
+  {
+    id: 'usr-prof-sarah',
+    name: 'Dr. Sarah Williams',
+    email: 'prof.sarah@gapfinder.demo',
+    password: 'Professor@123',
+    role: 'teacher',
+    targetGoal: 'Curriculum Diagnostic Analytics & Class Remediation',
+    institution: 'Department of Computer Science & Engineering',
+    createdAt: '2026-10-20T08:30:00Z',
+    isDemoUser: true,
+    enrolledCourses: ['course-cs201', 'course-cs202', 'course-cs301']
+  },
+  // 2. Student: Alex Chen (CS201 & CS202)
+  {
+    id: 'usr-alex-chen',
+    name: 'Alex Chen',
+    email: 'alex.chen@gapfinder.demo',
+    password: 'Student@123',
+    role: 'student',
+    targetGoal: 'CS201 & CS202 Final Examination Preparation',
+    institution: 'Department of Computer Science & Engineering',
+    createdAt: '2026-10-21T10:15:00Z',
+    isDemoUser: true,
+    enrolledCourses: ['course-cs201', 'course-cs202']
+  },
+  // 3. Student: Priya Sharma (CS201 & CS301)
+  {
+    id: 'usr-priya-sharma',
+    name: 'Priya Sharma',
+    email: 'priya.sharma@gapfinder.demo',
+    password: 'Student@123',
+    role: 'student',
+    targetGoal: 'CS201 Systems & CS301 Machine Learning Mastery',
+    institution: 'Department of Computer Science & Engineering',
+    createdAt: '2026-10-21T11:45:00Z',
+    isDemoUser: true,
+    enrolledCourses: ['course-cs201', 'course-cs301']
+  },
+  // Backwards-compatible aliases
   {
     id: 'usr-judge-eval',
-    name: 'Hackathon Judge',
+    name: 'Hackathon Judge / Evaluator',
     email: 'judge@gapfinder.ai',
+    password: 'demo123456',
     role: 'evaluator',
     targetGoal: 'Hackathon Evaluation & Verification',
     institution: 'Judging Committee',
     createdAt: '2026-10-20T10:00:00Z',
-    isDemoUser: true
+    isDemoUser: true,
+    enrolledCourses: ['course-cs201', 'course-cs202', 'course-cs301']
   },
   {
-    id: 'usr-student-alex',
+    id: 'usr-student-alex-alias',
     name: 'Alex Rivera',
     email: 'student@gapfinder.ai',
+    password: 'demo123456',
     role: 'student',
     targetGoal: 'University Semester Finals & Placement',
     institution: 'State Tech University (CS Dept)',
     createdAt: '2026-10-22T14:30:00Z',
-    isDemoUser: false
+    isDemoUser: false,
+    enrolledCourses: ['course-cs201', 'course-cs202']
   },
   {
-    id: 'usr-teacher-sarah',
+    id: 'usr-teacher-sarah-alias',
     name: 'Prof. Sarah Vance',
     email: 'teacher@gapfinder.ai',
+    password: 'demo123456',
     role: 'teacher',
     targetGoal: 'Curriculum Diagnostic Analytics',
     institution: 'Faculty of Computer Science',
     createdAt: '2026-10-21T09:15:00Z',
-    isDemoUser: false
+    isDemoUser: false,
+    enrolledCourses: ['course-cs201', 'course-cs202', 'course-cs301']
   }
 ];
 
@@ -85,8 +133,15 @@ export function getRegisteredUsers(): RegisteredUser[] {
       localStorage.setItem(STORAGE_KEYS.REGISTERED_USERS, JSON.stringify(PRESEEDED_USERS));
       return PRESEEDED_USERS;
     }
-    const parsed = JSON.parse(data);
-    return Array.isArray(parsed) && parsed.length > 0 ? parsed : PRESEEDED_USERS;
+    const parsed: RegisteredUser[] = JSON.parse(data);
+    // Ensure all preseeded accounts exist
+    const missing = PRESEEDED_USERS.filter(pu => !parsed.some(u => u.email.toLowerCase() === pu.email.toLowerCase()));
+    if (missing.length > 0) {
+      const merged = [...parsed, ...missing];
+      localStorage.setItem(STORAGE_KEYS.REGISTERED_USERS, JSON.stringify(merged));
+      return merged;
+    }
+    return parsed;
   } catch {
     return PRESEEDED_USERS;
   }
@@ -124,10 +179,15 @@ export function registerUser(newUserData: {
   return newUser;
 }
 
-export function authenticateUser(email: string, _password?: string): RegisteredUser | null {
+export function authenticateUser(email: string, password?: string): RegisteredUser | null {
   const users = getRegisteredUsers();
-  const found = users.find(u => u.email.toLowerCase() === email.trim().toLowerCase());
-  return found || null;
+  const cleanEmail = email.trim().toLowerCase();
+  const found = users.find(u => u.email.toLowerCase() === cleanEmail);
+  if (!found) return null;
+  if (password && found.password && found.password !== password.trim()) {
+    return null;
+  }
+  return found;
 }
 
 export function clearStoredUser(): void {
@@ -151,16 +211,23 @@ export function setStoredUser(user: UserSession): void {
 }
 
 export function getStoredCourses(): Course[] {
-  if (typeof window === 'undefined') return [INITIAL_PRELOADED_COURSE];
+  if (typeof window === 'undefined') return PRELOADED_COURSES;
   try {
     const data = localStorage.getItem(STORAGE_KEYS.COURSES);
     if (!data) {
-      localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify([INITIAL_PRELOADED_COURSE]));
-      return [INITIAL_PRELOADED_COURSE];
+      localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(PRELOADED_COURSES));
+      return PRELOADED_COURSES;
     }
-    return JSON.parse(data);
+    const parsed: Course[] = JSON.parse(data);
+    const missing = PRELOADED_COURSES.filter(pc => !parsed.some(c => c.id === pc.id || c.subjectCode === pc.subjectCode));
+    if (missing.length > 0) {
+      const merged = [...parsed, ...missing];
+      localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(merged));
+      return merged;
+    }
+    return parsed;
   } catch {
-    return [INITIAL_PRELOADED_COURSE];
+    return PRELOADED_COURSES;
   }
 }
 
@@ -335,7 +402,7 @@ export function setGeminiApiKey(key: string): void {
 export function resetToDemoCourse(): void {
   if (typeof window === 'undefined') return;
   localStorage.clear();
-  localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify([INITIAL_PRELOADED_COURSE]));
+  localStorage.setItem(STORAGE_KEYS.COURSES, JSON.stringify(PRELOADED_COURSES));
   localStorage.setItem(STORAGE_KEYS.ACTIVE_COURSE_ID, INITIAL_PRELOADED_COURSE.id);
   localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(DEMO_USER));
 }

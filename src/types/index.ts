@@ -173,6 +173,8 @@ export interface UserSession {
   email: string;
   role: 'student' | 'teacher' | 'evaluator';
   isDemoUser: boolean;
+  enrolledCourses?: string[];
+  password?: string;
 }
 
 export interface StudentPerformanceRecord {
