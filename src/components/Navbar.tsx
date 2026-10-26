@@ -378,18 +378,6 @@ export function Navbar({
             <Database className="w-3.5 h-3.5 text-emerald-600" />
             <span>DB & pgvector</span>
           </button>
-
-          <button
-            onClick={() => setActiveTab('architecture')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition shrink-0 ${
-              activeTab === 'architecture'
-                ? 'bg-amber-600 text-white shadow-sm'
-                : 'text-amber-800 bg-amber-50 hover:bg-amber-100 border border-amber-200'
-            }`}
-          >
-            <FileText className="w-3.5 h-3.5 text-amber-600" />
-            <span>AI Docs</span>
-          </button>
         </div>
       </div>
 

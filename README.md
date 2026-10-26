@@ -141,7 +141,6 @@ GapFinder AI/
 │   │   ├── layout.tsx           # Root HTML layout and metadata
 │   │   └── page.tsx             # Main view router & role-based switchboard
 │   ├── components/
-│   │   ├── ArchitectureView.tsx       # Interactive architecture & RAG documentation
 │   │   ├── AuthLandingView.tsx        # Centered first screen Sign In / Sign Up
 │   │   ├── DatabaseStudioView.tsx     # Supabase / PostgreSQL pgvector Studio
 │   │   ├── DiagnosticQuizView.tsx     # Source-grounded diagnostic quiz

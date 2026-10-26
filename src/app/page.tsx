@@ -10,7 +10,6 @@ import { ExplainAssistantView } from '@/components/ExplainAssistantView';
 import { MaterialUploadView } from '@/components/MaterialUploadView';
 import { ProgressDashboardView } from '@/components/ProgressDashboardView';
 import { DatabaseStudioView } from '@/components/DatabaseStudioView';
-import { ArchitectureView } from '@/components/ArchitectureView';
 import { AuthLandingView } from '@/components/AuthLandingView';
 import { TeacherDashboardView } from '@/components/TeacherDashboardView';
 import { Course, GapReport, RevisionPlan, UserSession } from '@/types';
@@ -255,8 +254,6 @@ export default function Home() {
         {activeTab === 'database' && (
           <DatabaseStudioView course={activeCourse} />
         )}
-
-        {activeTab === 'architecture' && <ArchitectureView />}
       </main>
 
       {/* Footer */}
