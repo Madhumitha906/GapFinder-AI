@@ -54,6 +54,7 @@ cp .env.example .env.local
 | `NEXTAUTH_URL` | No (Production) | `http://localhost:3000` | Canonical URL of the application |
 | `NEXTAUTH_SECRET` | No (Production) | `gapfinder-super-secret-key-eval-2026-production` | Secret string used to sign JWT session cookies |
 | `NEXT_PUBLIC_SUPABASE_URL` | Optional | `https://your-project.supabase.co` | URL of your Supabase project instance |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Optional | `sb_publishable_...` | Supabase Publishable Key (recommended) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Optional | `your-anon-public-key` | Public anonymous key for client requests |
 | `SUPABASE_SERVICE_ROLE_KEY` | Optional | `your-service-role-key` | Server-side elevated key (Never commit to Git!) |
 | `POSTGRES_URL` | Optional | `postgresql://postgres:...` | Direct PostgreSQL connection string |

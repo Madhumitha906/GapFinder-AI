@@ -50,6 +50,6 @@ export async function GET(req: NextRequest) {
       indexMethod: 'HNSW (vector_cosine_ops)',
       rpcFunction: 'match_document_chunks()'
     },
-    message: 'PostgreSQL pgvector schema generated and active. To connect to live remote Supabase instance, set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local.'
+    message: 'PostgreSQL pgvector schema generated and active. To connect to live remote Supabase instance, set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (or NEXT_PUBLIC_SUPABASE_ANON_KEY) in .env.local.'
   });
 }

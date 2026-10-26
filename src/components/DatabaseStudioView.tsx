@@ -1038,11 +1038,11 @@ $$;`;
 
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">
-                  NEXT_PUBLIC_SUPABASE_ANON_KEY
+                  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY / ANON_KEY
                 </label>
                 <input
                   type="password"
-                  placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  placeholder="sb_publishable_... or eyJhbGciOi..."
                   value={supabaseKey}
                   onChange={e => setSupabaseKey(e.target.value)}
                   className="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:ring-2 focus:ring-indigo-500"
