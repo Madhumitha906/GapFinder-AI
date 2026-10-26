@@ -14,10 +14,12 @@ import {
   RotateCcw,
   Sparkles,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  Plus
 } from 'lucide-react';
 import { Course, GapReport } from '@/types';
 import { resetToDemoCourse, setGeminiApiKey, getGeminiApiKey } from '@/lib/storage';
+import { CreateCourseModal } from '@/components/CreateCourseModal';
 
 interface NavbarProps {
   activeTab: string;
@@ -27,6 +29,7 @@ interface NavbarProps {
   onSelectCourse: (courseId: string) => void;
   gapReport: GapReport | null;
   onRefreshData: () => void;
+  onCourseCreated?: (newCourse: Course) => void;
 }
 
 export function Navbar({
@@ -36,9 +39,11 @@ export function Navbar({
   allCourses,
   onSelectCourse,
   gapReport,
-  onRefreshData
+  onRefreshData,
+  onCourseCreated
 }: NavbarProps) {
   const [showKeyModal, setShowKeyModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [keySavedMessage, setKeySavedMessage] = useState(false);
 
@@ -118,19 +123,35 @@ export function Navbar({
               </div>
             </div>
 
-            {/* Course Selector */}
-            <div className="hidden md:flex items-center pl-4 border-l border-slate-200">
+            {/* Course Selector & New Course Button */}
+            <div className="hidden md:flex items-center pl-4 border-l border-slate-200 gap-2">
               <select
                 value={activeCourse.id}
-                onChange={e => onSelectCourse(e.target.value)}
-                className="text-xs font-medium bg-slate-100 hover:bg-slate-200/80 text-slate-800 rounded-lg px-2.5 py-1.5 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer max-w-[240px] truncate"
+                onChange={e => {
+                  if (e.target.value === '__NEW_COURSE__') {
+                    setShowCreateModal(true);
+                  } else {
+                    onSelectCourse(e.target.value);
+                  }
+                }}
+                className="text-xs font-semibold bg-slate-100 hover:bg-slate-200/80 text-slate-800 rounded-lg px-2.5 py-1.5 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer max-w-[220px] truncate"
               >
                 {allCourses.map(c => (
                   <option key={c.id} value={c.id}>
                     {c.isPreloaded ? '⭐ ' : ''}{c.title}
                   </option>
                 ))}
+                <option value="__NEW_COURSE__">➕ Upload & Create New Course...</option>
               </select>
+
+              <button
+                onClick={() => setShowCreateModal(true)}
+                className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-sm shrink-0"
+                title="Upload & create a new course from syllabus"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ New Course</span>
+              </button>
             </div>
           </div>
 
@@ -290,6 +311,19 @@ export function Navbar({
           </div>
         </div>
       )}
+
+      {/* Create Course Modal */}
+      <CreateCourseModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onCourseCreated={newCourse => {
+          if (onCourseCreated) {
+            onCourseCreated(newCourse);
+          } else {
+            onRefreshData();
+          }
+        }}
+      />
     </header>
   );
 }

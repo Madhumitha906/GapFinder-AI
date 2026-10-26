@@ -17,16 +17,20 @@ import {
 import { Course, DocumentChunk, DocumentType, UploadedDocument } from '@/types';
 import { chunkDocument } from '@/lib/rag-engine';
 import { saveCourse } from '@/lib/storage';
+import { CreateCourseModal } from '@/components/CreateCourseModal';
 
 interface MaterialUploadViewProps {
   course: Course;
   onCourseUpdated: (course: Course) => void;
+  onCourseCreated?: (course: Course) => void;
 }
 
 export function MaterialUploadView({
   course,
-  onCourseUpdated
+  onCourseUpdated,
+  onCourseCreated
 }: MaterialUploadViewProps) {
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [docTitle, setDocTitle] = useState('');
   const [docType, setDocType] = useState<DocumentType>('notes');
   const [rawText, setRawText] = useState('');
@@ -112,14 +116,22 @@ export function MaterialUploadView({
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
-          <div className="bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-center">
-            <div className="text-xs text-slate-500 font-semibold">Indexed Documents</div>
-            <div className="text-xl font-bold text-slate-900">{course.documents.length}</div>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md shadow-indigo-600/20 transition hover:scale-105"
+          >
+            <Plus className="w-4 h-4" />
+            <span>+ Create & Upload New Course</span>
+          </button>
+
+          <div className="bg-slate-50 border border-slate-200 px-3.5 py-2 rounded-xl text-center">
+            <div className="text-[11px] text-slate-500 font-semibold">Indexed Docs</div>
+            <div className="text-lg font-bold text-slate-900">{course.documents.length}</div>
           </div>
-          <div className="bg-indigo-50 border border-indigo-100 px-4 py-2.5 rounded-xl text-center">
-            <div className="text-xs text-indigo-600 font-semibold">Active Chunks</div>
-            <div className="text-xl font-bold text-indigo-700">{totalChunks}</div>
+          <div className="bg-indigo-50 border border-indigo-100 px-3.5 py-2 rounded-xl text-center">
+            <div className="text-[11px] text-indigo-600 font-semibold">Active Chunks</div>
+            <div className="text-lg font-bold text-indigo-700">{totalChunks}</div>
           </div>
         </div>
       </div>
@@ -319,6 +331,19 @@ export function MaterialUploadView({
           </div>
         </div>
       )}
+
+      {/* Create Course Modal */}
+      <CreateCourseModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onCourseCreated={newCourse => {
+          if (onCourseCreated) {
+            onCourseCreated(newCourse);
+          } else {
+            onCourseUpdated(newCourse);
+          }
+        }}
+      />
     </div>
   );
 }
