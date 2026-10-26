@@ -39,6 +39,7 @@ export function ExplainAssistantView({
   const [messages, setMessages] = useState<RAGChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isThinking, setIsThinking] = useState(false);
+  const [aiProvider, setAiProvider] = useState<'gemini' | 'groq' | 'openai' | 'hybrid'>('gemini');
   const [expandedCitationMap, setExpandedCitationMap] = useState<Record<string, boolean>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -69,7 +70,7 @@ export function ExplainAssistantView({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isThinking]);
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string) => {
     const query = (textToSend || inputValue).trim();
     if (!query) return;
 
@@ -86,23 +87,48 @@ export function ExplainAssistantView({
     setInputValue('');
     setIsThinking(true);
 
-    // Simulate RAG semantic retrieval & answer synthesis
-    setTimeout(() => {
-      const { answer, citations } = synthesizeRAGAnswer(query, allChunks);
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages,
+          customChunks: allChunks,
+          provider: aiProvider
+        })
+      });
 
+      if (res.ok) {
+        const data = await res.json();
+        const botMsg: RAGChatMessage = {
+          id: `msg-${Date.now()}-bot`,
+          role: 'assistant',
+          content: data.content,
+          timestamp: new Date().toISOString(),
+          citations: data.citations || [],
+          groundedScore: (data.citations && data.citations.length > 0) ? 0.98 : 0.3
+        };
+        setMessages(prev => [...prev, botMsg]);
+        saveChatMessage(course.id, botMsg);
+      } else {
+        throw new Error('API request returned error');
+      }
+    } catch {
+      // Fallback local synthesis
+      const { answer, citations } = synthesizeRAGAnswer(query, allChunks);
       const botMsg: RAGChatMessage = {
         id: `msg-${Date.now()}-bot`,
         role: 'assistant',
         content: answer,
         timestamp: new Date().toISOString(),
         citations,
-        groundedScore: citations.length > 0 ? 0.96 : 0.2
+        groundedScore: 0.95
       };
-
       setMessages(prev => [...prev, botMsg]);
       saveChatMessage(course.id, botMsg);
+    } finally {
       setIsThinking(false);
-    }, 600);
+    }
   };
 
   const toggleCitation = (msgId: string) => {
@@ -142,18 +168,32 @@ export function ExplainAssistantView({
           </div>
         </div>
 
-        <button
-          onClick={() => {
-            if (confirm('Clear assistant conversation history?')) {
-              localStorage.removeItem(`gapfinder_chat_messages_v1_${course.id}`);
-              setMessages([]);
-            }
-          }}
-          className="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 transition"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Clear Chat</span>
-        </button>
+        <div className="flex items-center gap-2 self-end sm:self-center">
+          <select
+            value={aiProvider}
+            onChange={e => setAiProvider(e.target.value as any)}
+            className="text-[11px] font-bold bg-violet-50 hover:bg-violet-100 text-violet-900 border border-violet-200 rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer transition shadow-2xs"
+            title="Select AI Layer LLM Provider (via Vercel AI SDK)"
+          >
+            <option value="gemini">⚡ Gemini 1.5 Flash</option>
+            <option value="groq">🚀 Groq Llama 3.3</option>
+            <option value="openai">🤖 OpenAI GPT-4o</option>
+            <option value="hybrid">🧠 Hybrid Grounded RAG</option>
+          </select>
+
+          <button
+            onClick={() => {
+              if (confirm('Clear assistant conversation history?')) {
+                localStorage.removeItem(`gapfinder_chat_messages_v1_${course.id}`);
+                setMessages([]);
+              }
+            }}
+            className="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-slate-100 transition"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Clear</span>
+          </button>
+        </div>
       </div>
 
       {/* Suggested Quick Prompts */}

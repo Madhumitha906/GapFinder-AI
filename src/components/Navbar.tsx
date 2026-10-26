@@ -15,11 +15,15 @@ import {
   Sparkles,
   CheckCircle2,
   AlertTriangle,
-  Plus
+  Plus,
+  Database,
+  User,
+  LogIn
 } from 'lucide-react';
-import { Course, GapReport } from '@/types';
-import { resetToDemoCourse, setGeminiApiKey, getGeminiApiKey } from '@/lib/storage';
+import { Course, GapReport, UserSession } from '@/types';
+import { resetToDemoCourse, setGeminiApiKey, getGeminiApiKey, getStoredUser } from '@/lib/storage';
 import { CreateCourseModal } from '@/components/CreateCourseModal';
+import { AuthModal } from '@/components/AuthModal';
 
 interface NavbarProps {
   activeTab: string;
@@ -44,6 +48,8 @@ export function Navbar({
 }: NavbarProps) {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [currentUser, setCurrentUser] = useState<UserSession>(() => getStoredUser());
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [keySavedMessage, setKeySavedMessage] = useState(false);
 
@@ -72,11 +78,18 @@ export function Navbar({
       <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-950 text-white text-xs px-4 py-2 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="bg-indigo-500/30 border border-indigo-400/40 text-indigo-200 font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
-            Judge Evaluation Demo
+            NextAuth.js
           </span>
-          <span className="text-slate-200">
-            Preloaded Course: <strong className="text-white">CS301 Operating Systems Core</strong> &bull; Demo User: <code className="bg-black/30 px-1.5 py-0.5 rounded text-amber-300">judge@gapfinder.ai</code>
-          </span>
+          <button
+            onClick={() => setShowAuthModal(true)}
+            className="flex items-center gap-1.5 text-slate-200 hover:text-white transition px-2.5 py-0.5 rounded-md bg-white/10 hover:bg-white/20 border border-white/15 cursor-pointer font-medium"
+            title="Click to Switch Accounts or View NextAuth Credentials"
+          >
+            <User className="w-3 h-3 text-indigo-300" />
+            <span>{currentUser.email}</span>
+            <span className="text-[10px] text-amber-300 font-bold">({currentUser.role.toUpperCase()})</span>
+            <span className="text-[10px] text-slate-300 underline ml-1">Switch</span>
+          </button>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -247,6 +260,18 @@ export function Navbar({
             </button>
 
             <button
+              onClick={() => setActiveTab('database')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+                activeTab === 'database'
+                  ? 'bg-emerald-50 text-emerald-800 shadow-sm border border-emerald-200'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              }`}
+            >
+              <Database className="w-4 h-4 text-emerald-600" />
+              <span>DB & pgvector</span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('architecture')}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition ${
                 activeTab === 'architecture'
@@ -322,6 +347,17 @@ export function Navbar({
           } else {
             onRefreshData();
           }
+        }}
+      />
+
+      {/* NextAuth Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        currentUser={currentUser}
+        onUserLoggedIn={user => {
+          setCurrentUser(user);
+          onRefreshData();
         }}
       />
     </header>

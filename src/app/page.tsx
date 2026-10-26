@@ -9,6 +9,7 @@ import { RevisionPlanView } from '@/components/RevisionPlanView';
 import { ExplainAssistantView } from '@/components/ExplainAssistantView';
 import { MaterialUploadView } from '@/components/MaterialUploadView';
 import { ProgressDashboardView } from '@/components/ProgressDashboardView';
+import { DatabaseStudioView } from '@/components/DatabaseStudioView';
 import { ArchitectureView } from '@/components/ArchitectureView';
 import { Course, GapReport, RevisionPlan } from '@/types';
 import {
@@ -173,6 +174,10 @@ export default function Home() {
             onRetakeQuiz={handleStartFullDiagnostic}
             onNavigateToPlan={() => setActiveTab('revision-plan')}
           />
+        )}
+
+        {activeTab === 'database' && (
+          <DatabaseStudioView course={activeCourse} />
         )}
 
         {activeTab === 'architecture' && <ArchitectureView />}
