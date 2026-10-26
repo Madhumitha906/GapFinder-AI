@@ -11,7 +11,8 @@ import { MaterialUploadView } from '@/components/MaterialUploadView';
 import { ProgressDashboardView } from '@/components/ProgressDashboardView';
 import { DatabaseStudioView } from '@/components/DatabaseStudioView';
 import { ArchitectureView } from '@/components/ArchitectureView';
-import { Course, GapReport, RevisionPlan } from '@/types';
+import { AuthLandingView } from '@/components/AuthLandingView';
+import { Course, GapReport, RevisionPlan, UserSession } from '@/types';
 import {
   getActiveCourse,
   getStoredCourses,
@@ -19,22 +20,21 @@ import {
   getStoredGapReport,
   getStoredRevisionPlan,
   saveGapReport,
-  saveRevisionPlan
+  saveRevisionPlan,
+  getStoredUser,
+  clearStoredUser
 } from '@/lib/storage';
 import { computeGapReport, generatePersonalizedPlan } from '@/lib/rag-engine';
 import { INITIAL_PRELOADED_COURSE } from '@/lib/sample-data';
 
 export default function Home() {
+  const [currentUser, setCurrentUser] = useState<UserSession | null>(null);
+
   const [activeTab, setActiveTab] = useState<string>('topic-map');
   const [courses, setCourses] = useState<Course[]>([INITIAL_PRELOADED_COURSE]);
   const [activeCourse, setActiveCourse] = useState<Course>(INITIAL_PRELOADED_COURSE);
-  const [gapReport, setGapReport] = useState<GapReport | null>(() =>
-    computeGapReport(INITIAL_PRELOADED_COURSE.id, INITIAL_PRELOADED_COURSE.topics, [])
-  );
-  const [revisionPlan, setRevisionPlan] = useState<RevisionPlan | null>(() => {
-    const initReport = computeGapReport(INITIAL_PRELOADED_COURSE.id, INITIAL_PRELOADED_COURSE.topics, []);
-    return generatePersonalizedPlan(initReport, INITIAL_PRELOADED_COURSE.topics, '3_day_sprint', 3);
-  });
+  const [gapReport, setGapReport] = useState<GapReport | null>(null);
+  const [revisionPlan, setRevisionPlan] = useState<RevisionPlan | null>(null);
   const [quizSelectedTopicId, setQuizSelectedTopicId] = useState<string | null>(null);
   const [assistantTopicPrompt, setAssistantTopicPrompt] = useState<string | null>(null);
 
@@ -62,6 +62,9 @@ export default function Home() {
   };
 
   useEffect(() => {
+    // Check if user is already signed in
+    const stored = getStoredUser();
+    setCurrentUser(stored);
     loadData();
   }, []);
 
@@ -90,7 +93,24 @@ export default function Home() {
     setActiveTab('gap-report');
   };
 
+  const handleSignOut = () => {
+    clearStoredUser();
+    setCurrentUser(null);
+  };
 
+  // FIRST SHOW SIGN IN & SIGN UP LANDING SCREEN
+  if (!currentUser) {
+    return (
+      <AuthLandingView
+        onAuthenticated={user => {
+          setCurrentUser(user);
+          loadData();
+        }}
+      />
+    );
+  }
+
+  // AFTER SIGN IN OR SIGN UP: SHOW FULL PROJECT DASHBOARD
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Navbar
@@ -101,6 +121,9 @@ export default function Home() {
         onSelectCourse={handleSelectCourse}
         gapReport={gapReport}
         onRefreshData={loadData}
+        currentUser={currentUser}
+        onSignOut={handleSignOut}
+        onUserChanged={user => setCurrentUser(user)}
         onCourseCreated={c => {
           setActiveCourse(c);
           loadData();

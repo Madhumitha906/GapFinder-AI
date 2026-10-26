@@ -44,6 +44,9 @@ interface NavbarProps {
   gapReport: GapReport | null;
   onRefreshData: () => void;
   onCourseCreated?: (newCourse: Course) => void;
+  currentUser?: UserSession;
+  onSignOut?: () => void;
+  onUserChanged?: (user: UserSession) => void;
 }
 
 export function Navbar({
@@ -54,15 +57,25 @@ export function Navbar({
   onSelectCourse,
   gapReport,
   onRefreshData,
-  onCourseCreated
+  onCourseCreated,
+  currentUser: currentUserProp,
+  onSignOut,
+  onUserChanged
 }: NavbarProps) {
   const [showKeyModal, setShowKeyModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalTab, setAuthModalTab] = useState<'signin' | 'signup'>('signin');
-  const [currentUser, setCurrentUser] = useState<UserSession>(() => getStoredUser());
+  const [currentUser, setCurrentUser] = useState<UserSession>(() => currentUserProp || getStoredUser() || DEMO_USER);
   const [apiKeyInput, setApiKeyInput] = useState('');
   const [keySavedMessage, setKeySavedMessage] = useState(false);
+
+  // Sync with prop when parent updates user
+  React.useEffect(() => {
+    if (currentUserProp) {
+      setCurrentUser(currentUserProp);
+    }
+  }, [currentUserProp]);
 
   const handleReset = () => {
     if (confirm('Reset workspace to pristine CS301 Preloaded Course & Demo Data for evaluation?')) {
@@ -144,11 +157,15 @@ export function Navbar({
           <button
             onClick={() => {
               clearStoredUser();
-              setCurrentUser(DEMO_USER);
-              onRefreshData();
+              if (onSignOut) {
+                onSignOut();
+              } else {
+                setCurrentUser(DEMO_USER);
+                onRefreshData();
+              }
             }}
             className="text-slate-400 hover:text-rose-300 transition px-1.5 py-0.5 rounded hover:bg-rose-500/10 text-[10px] inline-flex items-center gap-1"
-            title="Reset to default session"
+            title="Sign out and return to landing screen"
           >
             <LogOut className="w-2.5 h-2.5" />
             <span>Sign Out</span>
@@ -448,6 +465,7 @@ export function Navbar({
         initialTab={authModalTab}
         onUserLoggedIn={user => {
           setCurrentUser(user);
+          if (onUserChanged) onUserChanged(user);
           onRefreshData();
         }}
       />

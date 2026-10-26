@@ -132,16 +132,16 @@ export function authenticateUser(email: string, _password?: string): RegisteredU
 
 export function clearStoredUser(): void {
   if (typeof window === 'undefined') return;
-  localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(DEMO_USER));
+  localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
 }
 
-export function getStoredUser(): UserSession {
-  if (typeof window === 'undefined') return DEMO_USER;
+export function getStoredUser(): UserSession | null {
+  if (typeof window === 'undefined') return null;
   try {
     const data = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    return data ? JSON.parse(data) : DEMO_USER;
+    return data ? JSON.parse(data) : null;
   } catch {
-    return DEMO_USER;
+    return null;
   }
 }
 
